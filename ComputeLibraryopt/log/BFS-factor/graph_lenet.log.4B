@@ -1,0 +1,428 @@
+
+./build/examples/graph_lenet
+
+Usage: ./build/examples/graph_lenet [target] [path_to_data] [batches] [fast_math_hint]
+
+No data folder provided: using random values
+
+NEWeightsReshapeKernel
+factor is: 1
+split_window3: 20:4:0:0:0:5:1
+0, 5
+split_window3: 20:4:0:1:5:10:1
+1, 5
+split_window3: 20:4:0:2:10:15:1
+2, 5
+split_window3: 20:4:0:3:15:20:1
+3, 5
+NEIm2ColKernel
+factor is: 1
+split_window3: 24:4:0:0:0:6:1
+0, 576
+split_window3: 24:4:0:1:6:12:1
+1, 576
+split_window3: 24:4:0:2:12:18:1
+2, 576
+split_window3: 24:4:0:3:18:24:1
+3, 576
+NEGEMMAssemblyWrapper
+factor is: 1
+split_window3: 288:4:0:0:0:72:1
+0, 72
+split_window3: 288:4:0:1:72:144:1
+1, 72
+split_window3: 288:4:0:2:144:216:1
+2, 72
+split_window3: 288:4:0:3:216:288:1
+3, 72
+NECol2ImKernel
+factor is: 1
+split_window3: 576:4:0:0:0:144:1
+0, 11520
+split_window3: 576:4:0:1:144:288:1
+1, 11520
+split_window3: 576:4:0:2:288:432:1
+2, 11520
+split_window3: 576:4:0:3:432:576:1
+3, 11520
+Node info: ID: 3, type: 2, cost: 0.00200364
+NEFillBorderKernel
+-1, 80
+NEPoolingLayerKernel
+factor is: 1
+split_window3: 12:4:0:0:0:3:1
+0, 2880
+split_window3: 12:4:0:1:3:6:1
+1, 2880
+split_window3: 12:4:0:2:6:9:1
+2, 2880
+split_window3: 12:4:0:3:9:12:1
+3, 2880
+Node info: ID: 4, type: 9, cost: 0.000348957
+NEWeightsReshapeKernel
+factor is: 1
+split_window3: 50:4:0:0:0:12:1
+0, 12
+split_window3: 50:4:0:1:12:24:1
+1, 12
+split_window3: 50:4:0:2:24:36:1
+2, 12
+split_window3: 50:4:0:3:36:50:1
+3, 14
+NEIm2ColKernel
+factor is: 1
+split_window3: 8:4:0:0:0:2:1
+0, 64
+split_window3: 8:4:0:1:2:4:1
+1, 64
+split_window3: 8:4:0:2:4:6:1
+2, 64
+split_window3: 8:4:0:3:6:8:1
+3, 64
+NEGEMMAssemblyWrapper
+factor is: 1
+split_window3: 32:4:0:0:0:8:1
+0, 8
+split_window3: 32:4:0:1:8:16:1
+1, 8
+split_window3: 32:4:0:2:16:24:1
+2, 8
+split_window3: 32:4:0:3:24:32:1
+3, 8
+NECol2ImKernel
+factor is: 1
+split_window3: 64:4:0:0:0:16:1
+0, 3200
+split_window3: 64:4:0:1:16:32:1
+1, 3200
+split_window3: 64:4:0:2:32:48:1
+2, 3200
+split_window3: 64:4:0:3:48:64:1
+3, 3200
+Node info: ID: 7, type: 2, cost: 0.00234687
+NEFillBorderKernel
+-1, 200
+NEPoolingLayerKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 800
+split_window1: 4:4:0:1:1:2:1
+1, 800
+split_window1: 4:4:0:2:2:3:1
+2, 800
+split_window1: 4:4:0:3:3:4:1
+3, 800
+Node info: ID: 8, type: 9, cost: 0.000102082
+NETransposeKernel
+factor is: 1
+split_window3: 125:4:0:0:0:124:4
+0, 24800
+split_window3: 125:4:0:1:124:248:4
+1, 24800
+split_window3: 125:4:0:2:248:372:4
+2, 24800
+split_window3: 125:4:0:3:372:500:4
+3, 25600
+NEGEMMTranspose1xWKernel
+factor is: 1
+split_window3: 800:4:0:0:0:200:1
+0, 25000
+split_window3: 800:4:0:1:200:400:1
+1, 25000
+split_window3: 800:4:0:2:400:600:1
+2, 25000
+split_window3: 800:4:0:3:600:800:1
+3, 25000
+NEIm2ColKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 800
+split_window1: 4:4:0:1:1:2:1
+1, 800
+split_window1: 4:4:0:2:2:3:1
+2, 800
+split_window1: 4:4:0:3:3:4:1
+3, 800
+NEGEMMInterleave4x4Kernel
+-1, 200
+NEGEMMMatrixMultiplyKernel
+-1, 63
+NEGEMMMatrixAccumulateBiasesKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 32
+split_window1: 4:4:0:1:1:2:1
+1, 32
+split_window1: 4:4:0:2:2:3:1
+2, 32
+split_window1: 4:4:0:3:3:4:1
+3, 32
+Node info: ID: 11, type: 7, cost: 0.00316509
+NEFillBorderKernel
+-1, 0
+NEActivationLayerKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 32
+split_window1: 4:4:0:1:1:2:1
+1, 32
+split_window1: 4:4:0:2:2:3:1
+2, 32
+split_window1: 4:4:0:3:3:4:1
+3, 32
+Node info: ID: 12, type: 0, cost: 0.000285936
+NETransposeKernel
+Error: big + little is not equal num_threads
+factor is: 1
+split_window1: 3:4:0:0:0:4:4
+0, 500
+split_window1: 3:4:0:1:4:8:4
+1, 500
+split_window1: 3:4:0:2:8:12:4
+2, 500
+NEGEMMTranspose1xWKernel
+factor is: 1
+split_window3: 500:4:0:0:0:125:1
+0, 375
+split_window3: 500:4:0:1:125:250:1
+1, 375
+split_window3: 500:4:0:2:250:375:1
+2, 375
+split_window3: 500:4:0:3:375:500:1
+3, 375
+NEGEMMInterleave4x4Kernel
+-1, 125
+NEGEMMMatrixMultiplyKernel
+-1, 2
+NEGEMMMatrixAccumulateBiasesKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 1
+split_window1: 4:4:0:1:1:2:1
+1, 1
+split_window1: 4:4:0:2:2:3:1
+2, 1
+split_window1: 4:4:0:3:3:4:1
+3, 1
+Node info: ID: 15, type: 7, cost: 0.000871351
+NEFillBorderKernel
+-1, 1
+NELogits1DMaxKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 1
+split_window1: 4:4:0:1:1:2:1
+1, 1
+split_window1: 4:4:0:2:2:3:1
+2, 1
+split_window1: 4:4:0:3:3:4:1
+3, 1
+NELogits1DSoftmaxKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 1
+split_window1: 4:4:0:1:1:2:1
+1, 1
+split_window1: 4:4:0:2:2:3:1
+2, 1
+split_window1: 4:4:0:3:3:4:1
+3, 1
+Node info: ID: 16, type: 12, cost: 0.000653643
+Summary: 
+Total time: 0.00977757
+ActivationLayer: 0.000285936
+BatchNormalizationLayer: 0
+ConvolutionLayer: 0.00435051
+DepthConcatenateLayer: 0
+DepthwiseConvolutionLayer: 0
+EltwiseLayer: 0
+FlattenLayer: 0
+FullyConnectedLayer: 0.00403644
+NormalizationLayer: 0
+PoolingLayer: 0.000451039
+ReshapeLayer: 0
+ScaleLayer: 0
+SoftmaxLayer: 0.000653643
+SplitLayer: 0
+NEIm2ColKernel
+factor is: 1
+split_window3: 24:4:0:0:0:6:1
+0, 576
+split_window3: 24:4:0:1:6:12:1
+1, 576
+split_window3: 24:4:0:2:12:18:1
+2, 576
+split_window3: 24:4:0:3:18:24:1
+3, 576
+NEGEMMAssemblyWrapper
+factor is: 1
+split_window3: 288:4:0:0:0:72:1
+0, 72
+split_window3: 288:4:0:1:72:144:1
+1, 72
+split_window3: 288:4:0:2:144:216:1
+2, 72
+split_window3: 288:4:0:3:216:288:1
+3, 72
+NECol2ImKernel
+factor is: 1
+split_window3: 576:4:0:0:0:144:1
+0, 11520
+split_window3: 576:4:0:1:144:288:1
+1, 11520
+split_window3: 576:4:0:2:288:432:1
+2, 11520
+split_window3: 576:4:0:3:432:576:1
+3, 11520
+Node info: ID: 3, type: 2, cost: 0.000793226
+NEFillBorderKernel
+-1, 80
+NEPoolingLayerKernel
+factor is: 1
+split_window3: 12:4:0:0:0:3:1
+0, 2880
+split_window3: 12:4:0:1:3:6:1
+1, 2880
+split_window3: 12:4:0:2:6:9:1
+2, 2880
+split_window3: 12:4:0:3:9:12:1
+3, 2880
+Node info: ID: 4, type: 9, cost: 0.000140624
+NEIm2ColKernel
+factor is: 1
+split_window3: 8:4:0:0:0:2:1
+0, 64
+split_window3: 8:4:0:1:2:4:1
+1, 64
+split_window3: 8:4:0:2:4:6:1
+2, 64
+split_window3: 8:4:0:3:6:8:1
+3, 64
+NEGEMMAssemblyWrapper
+factor is: 1
+split_window3: 32:4:0:0:0:8:1
+0, 8
+split_window3: 32:4:0:1:8:16:1
+1, 8
+split_window3: 32:4:0:2:16:24:1
+2, 8
+split_window3: 32:4:0:3:24:32:1
+3, 8
+NECol2ImKernel
+factor is: 1
+split_window3: 64:4:0:0:0:16:1
+0, 3200
+split_window3: 64:4:0:1:16:32:1
+1, 3200
+split_window3: 64:4:0:2:32:48:1
+2, 3200
+split_window3: 64:4:0:3:48:64:1
+3, 3200
+Node info: ID: 7, type: 2, cost: 0.00126822
+NEFillBorderKernel
+-1, 200
+NEPoolingLayerKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 800
+split_window1: 4:4:0:1:1:2:1
+1, 800
+split_window1: 4:4:0:2:2:3:1
+2, 800
+split_window1: 4:4:0:3:3:4:1
+3, 800
+Node info: ID: 8, type: 9, cost: 9.8437e-05
+NEIm2ColKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 800
+split_window1: 4:4:0:1:1:2:1
+1, 800
+split_window1: 4:4:0:2:2:3:1
+2, 800
+split_window1: 4:4:0:3:3:4:1
+3, 800
+NEGEMMInterleave4x4Kernel
+-1, 200
+NEGEMMMatrixMultiplyKernel
+-1, 63
+NEGEMMMatrixAccumulateBiasesKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 32
+split_window1: 4:4:0:1:1:2:1
+1, 32
+split_window1: 4:4:0:2:2:3:1
+2, 32
+split_window1: 4:4:0:3:3:4:1
+3, 32
+Node info: ID: 11, type: 7, cost: 0.000974996
+NEFillBorderKernel
+-1, 0
+NEActivationLayerKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 32
+split_window1: 4:4:0:1:1:2:1
+1, 32
+split_window1: 4:4:0:2:2:3:1
+2, 32
+split_window1: 4:4:0:3:3:4:1
+3, 32
+Node info: ID: 12, type: 0, cost: 9.5312e-05
+NEGEMMInterleave4x4Kernel
+-1, 125
+NEGEMMMatrixMultiplyKernel
+-1, 2
+NEGEMMMatrixAccumulateBiasesKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 1
+split_window1: 4:4:0:1:1:2:1
+1, 1
+split_window1: 4:4:0:2:2:3:1
+2, 1
+split_window1: 4:4:0:3:3:4:1
+3, 1
+Node info: ID: 15, type: 7, cost: 0.000119271
+NEFillBorderKernel
+-1, 1
+NELogits1DMaxKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 1
+split_window1: 4:4:0:1:1:2:1
+1, 1
+split_window1: 4:4:0:2:2:3:1
+2, 1
+split_window1: 4:4:0:3:3:4:1
+3, 1
+NELogits1DSoftmaxKernel
+factor is: 1
+split_window1: 4:4:0:0:0:1:1
+0, 1
+split_window1: 4:4:0:1:1:2:1
+1, 1
+split_window1: 4:4:0:2:2:3:1
+2, 1
+split_window1: 4:4:0:3:3:4:1
+3, 1
+Node info: ID: 16, type: 12, cost: 0.00018802
+Summary: 
+Total time: 0.0134557
+ActivationLayer: 0.000381248
+BatchNormalizationLayer: 0
+ConvolutionLayer: 0.00641196
+DepthConcatenateLayer: 0
+DepthwiseConvolutionLayer: 0
+EltwiseLayer: 0
+FlattenLayer: 0
+FullyConnectedLayer: 0.00513071
+NormalizationLayer: 0
+PoolingLayer: 0.0006901
+ReshapeLayer: 0
+ScaleLayer: 0
+SoftmaxLayer: 0.000841663
+SplitLayer: 0
+
+Test passed

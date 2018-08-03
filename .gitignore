@@ -1,0 +1,4 @@
+#Exclude everything build
+build/
+*.sh
+*.log

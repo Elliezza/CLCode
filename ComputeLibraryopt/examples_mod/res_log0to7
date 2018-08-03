@@ -1,0 +1,603 @@
+
+./res50
+
+Usage: ./res50 0 [path_to_data] [image] [labels] [fast_math_hint]
+
+No data folder provided: using random values
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Running mutating pass : InPlaceOperationMutator
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Running mutating pass : NodeFusionMutator
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Running mutating pass : SplitLayerSubTensorMutator
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Running mutating pass : DepthConcatSubTensorMutator
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 224x224x3 Weights shape: 7x7x3x64 Output shape: 112x112x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 112x112x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEPoolingLayer Data Type: F32 Input shape: 112x112x64 Output shape: 56x56x64 Pooling info: MAX
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 1x1x64x64 Output shape: 56x56x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 3x3x64x64 Output shape: 56x56x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 1x1x64x256 Output shape: 56x56x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x256 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 1x1x64x256 Output shape: 56x56x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x256 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 56x56x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 56x56x256 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x256 Weights shape: 1x1x256x64 Output shape: 56x56x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 3x3x64x64 Output shape: 56x56x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 1x1x64x256 Output shape: 56x56x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x256 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 56x56x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 56x56x256 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x256 Weights shape: 1x1x256x64 Output shape: 56x56x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 56x56x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 56x56x64 Weights shape: 3x3x64x64 Output shape: 28x28x64
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x64 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x64 Weights shape: 1x1x64x256 Output shape: 28x28x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x256 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEPoolingLayer Data Type: F32 Input shape: 56x56x256 Output shape: 28x28x256 Pooling info: MAX
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 28x28x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 28x28x256 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x256 Weights shape: 1x1x256x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 3x3x128x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 1x1x128x512 Output shape: 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x512 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x256 Weights shape: 1x1x256x512 Output shape: 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x512 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 28x28x512 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x512 Weights shape: 1x1x512x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 3x3x128x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 1x1x128x512 Output shape: 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x512 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 28x28x512 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x512 Weights shape: 1x1x512x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 3x3x128x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 1x1x128x512 Output shape: 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x512 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 28x28x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 28x28x512 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x512 Weights shape: 1x1x512x128 Output shape: 28x28x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 28x28x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 28x28x128 Weights shape: 3x3x128x128 Output shape: 14x14x128
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x128 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x128 Weights shape: 1x1x128x512 Output shape: 14x14x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x512 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEPoolingLayer Data Type: F32 Input shape: 28x28x512 Output shape: 14x14x512 Pooling info: MAX
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 14x14x512
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 14x14x512 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x512 Weights shape: 1x1x512x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 3x3x256x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 1x1x256x1024 Output shape: 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x512 Weights shape: 1x1x512x1024 Output shape: 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 14x14x1024 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x1024 Weights shape: 1x1x1024x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 3x3x256x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 1x1x256x1024 Output shape: 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 14x14x1024 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x1024 Weights shape: 1x1x1024x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 3x3x256x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 1x1x256x1024 Output shape: 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 14x14x1024 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x1024 Weights shape: 1x1x1024x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 3x3x256x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:22][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 1x1x256x1024 Output shape: 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 14x14x1024 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x1024 Weights shape: 1x1x1024x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 3x3x256x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 1x1x256x1024 Output shape: 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 14x14x1024
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 14x14x1024 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x1024 Weights shape: 1x1x1024x256 Output shape: 14x14x256
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 14x14x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 14x14x256 Weights shape: 3x3x256x256 Output shape: 7x7x256
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x256 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x256 Weights shape: 1x1x256x1024 Output shape: 7x7x1024
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x1024 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEPoolingLayer Data Type: F32 Input shape: 14x14x1024 Output shape: 7x7x1024 Pooling info: MAX
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 7x7x1024
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 7x7x1024 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x1024 Weights shape: 1x1x1024x512 Output shape: 7x7x512
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x512 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x512 Weights shape: 3x3x512x512 Output shape: 7x7x512
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x512 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x512 Weights shape: 1x1x512x2048 Output shape: 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x2048 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x1024 Weights shape: 1x1x1024x2048 Output shape: 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x2048 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 7x7x2048 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x2048 Weights shape: 1x1x2048x512 Output shape: 7x7x512
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x512 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x512 Weights shape: 3x3x512x512 Output shape: 7x7x512
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x512 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x512 Weights shape: 1x1x512x2048 Output shape: 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x2048 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 7x7x2048 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x2048 Weights shape: 1x1x2048x512 Output shape: 7x7x512
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x512 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x512 Weights shape: 3x3x512x512 Output shape: 7x7x512
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x512 Epsilon: 1.001e-05 RELU InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 7x7x512 Weights shape: 1x1x512x2048 Output shape: 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEBatchNormalizationLayer Data Type: F32 Shape: 7x7x2048 Epsilon: 1.001e-05  InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEArithmeticAddition Data Type: F32 Shape : 7x7x2048
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEActivationLayer Data Type: F32 Shape: 7x7x2048 Activation function: RELU a: 0 b: 0 InPlace : 1
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEPoolingLayer Data Type: F32 Input shape: 7x7x2048 Output shape: 1x1x2048 Pooling info: AVG
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEConvolutionLayer Data Type: F32 Input QuantInfo: Scale:0~Offset:0 Weights QuantInfo: Scale:0~Offset:0 Input shape: 1x1x2048 Weights shape: 1x1x2048x1000 Output shape: 1x1x1000
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NEFlattenLayer Data Type: F32 Input shape: 1x1x1000 Output shape: 1000
+
+ [GRAPH][20-06-2018 01:46:23][INFO]  Instantiated NESoftmaxLayer Data Type: F32 Input shape: 1000 Output shape: 1000
+
+Node ID 2 Node type: 2 Time: 0.069958
+Node ID 7 Node type: 1 Time: 0.0206636
+Node ID 9 Node type: 9 Time: 0.0249881
+Node ID 11 Node type: 2 Time: 0.0146073
+Node ID 16 Node type: 1 Time: 0.00567241
+Node ID 19 Node type: 2 Time: 0.0798767
+Node ID 24 Node type: 1 Time: 0.00649637
+Node ID 27 Node type: 2 Time: 0.0975596
+Node ID 32 Node type: 1 Time: 0.0264391
+Node ID 34 Node type: 2 Time: 0.10038
+Node ID 39 Node type: 1 Time: 0.0270126
+Node ID 40 Node type: 5 Time: 0.0188323
+Node ID 41 Node type: 0 Time: 0.0105235
+Node ID 43 Node type: 2 Time: 0.0492381
+Node ID 48 Node type: 1 Time: 0.0130537
+Node ID 51 Node type: 2 Time: 0.10533
+Node ID 56 Node type: 1 Time: 0.00667033
+Node ID 59 Node type: 2 Time: 0.0999091
+Node ID 64 Node type: 1 Time: 0.0237422
+Node ID 65 Node type: 5 Time: 0.0151235
+Node ID 66 Node type: 0 Time: 0.0082995
+Node ID 68 Node type: 2 Time: 0.0420501
+Node ID 73 Node type: 1 Time: 0.0132032
+Node ID 76 Node type: 2 Time: 0.0178198
+Node ID 81 Node type: 1 Time: 0.00221355
+Node ID 84 Node type: 2 Time: 0.0262641
+Node ID 89 Node type: 1 Time: 0.0111651
+Node ID 90 Node type: 9 Time: 0.032311
+Node ID 91 Node type: 5 Time: 0.00498855
+Node ID 92 Node type: 0 Time: 0.0039047
+Node ID 94 Node type: 2 Time: 0.0190026
+Node ID 99 Node type: 1 Time: 0.00372813
+Node ID 102 Node type: 2 Time: 0.103199
+Node ID 107 Node type: 1 Time: 0.00368594
+Node ID 110 Node type: 2 Time: 0.0503761
+Node ID 115 Node type: 1 Time: 0.0190667
+Node ID 117 Node type: 2 Time: 0.0594402
+Node ID 122 Node type: 1 Time: 0.0126146
+Node ID 123 Node type: 5 Time: 0.00880262
+Node ID 124 Node type: 0 Time: 0.00512449
+Node ID 126 Node type: 2 Time: 0.0224636
+Node ID 131 Node type: 1 Time: 0.00380365
+Node ID 134 Node type: 2 Time: 0.100372
+Node ID 139 Node type: 1 Time: 0.00345209
+Node ID 142 Node type: 2 Time: 0.0545121
+Node ID 147 Node type: 1 Time: 0.0195683
+Node ID 148 Node type: 5 Time: 0.0142193
+Node ID 149 Node type: 0 Time: 0.00591824
+Node ID 151 Node type: 2 Time: 0.0238334
+Node ID 156 Node type: 1 Time: 0.00371667
+Node ID 159 Node type: 2 Time: 0.109821
+Node ID 164 Node type: 1 Time: 0.00453126
+Node ID 167 Node type: 2 Time: 0.052248
+Node ID 172 Node type: 1 Time: 0.0170927
+Node ID 173 Node type: 5 Time: 0.00977137
+Node ID 174 Node type: 0 Time: 0.00566824
+Node ID 176 Node type: 2 Time: 0.0225375
+Node ID 181 Node type: 1 Time: 0.00373178
+Node ID 184 Node type: 2 Time: 0.0109433
+Node ID 189 Node type: 1 Time: 0.00164844
+Node ID 192 Node type: 2 Time: 0.0156552
+Node ID 197 Node type: 1 Time: 0.00579012
+Node ID 198 Node type: 9 Time: 0.02255
+Node ID 199 Node type: 5 Time: 0.00433647
+Node ID 200 Node type: 0 Time: 0.00262813
+Node ID 202 Node type: 2 Time: 0.0124516
+Node ID 207 Node type: 1 Time: 0.00314428
+Node ID 210 Node type: 2 Time: 0.275328
+Node ID 215 Node type: 1 Time: 0.00315573
+Node ID 218 Node type: 2 Time: 0.0357334
+Node ID 223 Node type: 1 Time: 0.0116255
+Node ID 225 Node type: 2 Time: 0.0492506
+Node ID 230 Node type: 1 Time: 0.0140354
+Node ID 231 Node type: 5 Time: 0.0057172
+Node ID 232 Node type: 0 Time: 0.00411095
+Node ID 234 Node type: 2 Time: 0.0105328
+Node ID 239 Node type: 1 Time: 0.00252709
+Node ID 242 Node type: 2 Time: 0.226407
+Node ID 247 Node type: 1 Time: 0.00250313
+Node ID 250 Node type: 2 Time: 0.0176459
+Node ID 255 Node type: 1 Time: 0.0087547
+Node ID 256 Node type: 5 Time: 0.00561512
+Node ID 257 Node type: 0 Time: 0.00412344
+Node ID 259 Node type: 2 Time: 0.00985367
+Node ID 264 Node type: 1 Time: 0.00251198
+Node ID 267 Node type: 2 Time: 0.227201
+Node ID 272 Node type: 1 Time: 0.00279532
+Node ID 275 Node type: 2 Time: 0.0180292
+Node ID 280 Node type: 1 Time: 0.00871408
+Node ID 281 Node type: 5 Time: 0.00573178
+Node ID 282 Node type: 0 Time: 0.00407709
+Node ID 284 Node type: 2 Time: 0.0103417
+Node ID 289 Node type: 1 Time: 0.00280157
+Node ID 292 Node type: 2 Time: 0.23022
+Node ID 297 Node type: 1 Time: 0.00250365
+Node ID 300 Node type: 2 Time: 0.017475
+Node ID 305 Node type: 1 Time: 0.00878023
+Node ID 306 Node type: 5 Time: 0.00563282
+Node ID 307 Node type: 0 Time: 0.00408282
+Node ID 309 Node type: 2 Time: 0.0103662
+Node ID 314 Node type: 1 Time: 0.00260053
+Node ID 317 Node type: 2 Time: 0.231831
+Node ID 322 Node type: 1 Time: 0.00250626
+Node ID 325 Node type: 2 Time: 0.0399516
+Node ID 330 Node type: 1 Time: 0.0145625
+Node ID 331 Node type: 5 Time: 0.0100287
+Node ID 332 Node type: 0 Time: 0.00534116
+Node ID 334 Node type: 2 Time: 0.0216553
+Node ID 339 Node type: 1 Time: 0.00282969
+Node ID 342 Node type: 2 Time: 0.0262896
+Node ID 347 Node type: 1 Time: 0.00206094
+Node ID 350 Node type: 2 Time: 0.0219605
+Node ID 355 Node type: 1 Time: 0.00548387
+Node ID 356 Node type: 9 Time: 0.0136891
+Node ID 357 Node type: 5 Time: 0.00459428
+Node ID 358 Node type: 0 Time: 0.00325574
+Node ID 360 Node type: 2 Time: 0.0336386
+Node ID 365 Node type: 1 Time: 0.00248646
+Node ID 368 Node type: 2 Time: 1.01049
+Node ID 373 Node type: 1 Time: 0.00246407
+Node ID 376 Node type: 2 Time: 0.0667772
+Node ID 381 Node type: 1 Time: 0.0174849
+Node ID 383 Node type: 2 Time: 0.0951695
+Node ID 388 Node type: 1 Time: 0.0120365
+Node ID 389 Node type: 5 Time: 0.00920835
+Node ID 390 Node type: 0 Time: 0.00657085
+Node ID 392 Node type: 2 Time: 0.0556163
+Node ID 397 Node type: 1 Time: 0.00330782
+Node ID 400 Node type: 2 Time: 1.01896
+Node ID 405 Node type: 1 Time: 0.00322917
+Node ID 408 Node type: 2 Time: 0.0646918
+Node ID 413 Node type: 1 Time: 0.0154532
+Node ID 414 Node type: 5 Time: 0.0169584
+Node ID 415 Node type: 0 Time: 0.00924846
+Node ID 417 Node type: 2 Time: 0.0566881
+Node ID 422 Node type: 1 Time: 0.00327397
+Node ID 425 Node type: 2 Time: 1.03552
+Node ID 430 Node type: 1 Time: 0.00274584
+Node ID 433 Node type: 2 Time: 0.0577152
+Node ID 438 Node type: 1 Time: 0.0146104
+Node ID 439 Node type: 5 Time: 0.00926825
+Node ID 440 Node type: 0 Time: 0.00662345
+Node ID 441 Node type: 9 Time: 0.0117334
+Node ID 444 Node type: 2 Time: 0.0907017
+Node ID 445 Node type: 6 Time: 0.000808335
+Node ID 446 Node type: 12 Time: 0.000214063
+Node ID 2 Node type: 2 Time: 0.135486
+Node ID 7 Node type: 1 Time: 0.0299251
+Node ID 9 Node type: 9 Time: 0.042024
+Node ID 11 Node type: 2 Time: 0.0312803
+Node ID 16 Node type: 1 Time: 0.00849689
+Node ID 19 Node type: 2 Time: 0.0794069
+Node ID 24 Node type: 1 Time: 0.00885731
+Node ID 27 Node type: 2 Time: 0.102179
+Node ID 32 Node type: 1 Time: 0.0259813
+Node ID 34 Node type: 2 Time: 0.107973
+Node ID 39 Node type: 1 Time: 0.028435
+Node ID 40 Node type: 5 Time: 0.0179735
+Node ID 41 Node type: 0 Time: 0.0121709
+Node ID 43 Node type: 2 Time: 0.0525308
+Node ID 48 Node type: 1 Time: 0.015586
+Node ID 51 Node type: 2 Time: 0.076733
+Node ID 56 Node type: 1 Time: 0.0072797
+Node ID 59 Node type: 2 Time: 0.0996148
+Node ID 64 Node type: 1 Time: 0.0230709
+Node ID 65 Node type: 5 Time: 0.0155813
+Node ID 66 Node type: 0 Time: 0.0114479
+Node ID 68 Node type: 2 Time: 0.0435584
+Node ID 73 Node type: 1 Time: 0.00736512
+Node ID 76 Node type: 2 Time: 0.0122912
+Node ID 81 Node type: 1 Time: 0.00226563
+Node ID 84 Node type: 2 Time: 0.0262818
+Node ID 89 Node type: 1 Time: 0.00822293
+Node ID 90 Node type: 9 Time: 0.0312735
+Node ID 91 Node type: 5 Time: 0.00451303
+Node ID 92 Node type: 0 Time: 0.00313334
+Node ID 94 Node type: 2 Time: 0.0172584
+Node ID 99 Node type: 1 Time: 0.00412449
+Node ID 102 Node type: 2 Time: 0.0439058
+Node ID 107 Node type: 1 Time: 0.00385261
+Node ID 110 Node type: 2 Time: 0.0486824
+Node ID 115 Node type: 1 Time: 0.0174849
+Node ID 117 Node type: 2 Time: 0.0573277
+Node ID 122 Node type: 1 Time: 0.0180391
+Node ID 123 Node type: 5 Time: 0.011524
+Node ID 124 Node type: 0 Time: 0.00529376
+Node ID 126 Node type: 2 Time: 0.0212136
+Node ID 131 Node type: 1 Time: 0.00405938
+Node ID 134 Node type: 2 Time: 0.0383897
+Node ID 139 Node type: 1 Time: 0.00343126
+Node ID 142 Node type: 2 Time: 0.0508241
+Node ID 147 Node type: 1 Time: 0.0131995
+Node ID 148 Node type: 5 Time: 0.00917918
+Node ID 149 Node type: 0 Time: 0.00568855
+Node ID 151 Node type: 2 Time: 0.0196506
+Node ID 156 Node type: 1 Time: 0.00373542
+Node ID 159 Node type: 2 Time: 0.0471683
+Node ID 164 Node type: 1 Time: 0.00380574
+Node ID 167 Node type: 2 Time: 0.0491715
+Node ID 172 Node type: 1 Time: 0.0171105
+Node ID 173 Node type: 5 Time: 0.0106542
+Node ID 174 Node type: 0 Time: 0.00694272
+Node ID 176 Node type: 2 Time: 0.0196584
+Node ID 181 Node type: 1 Time: 0.00349115
+Node ID 184 Node type: 2 Time: 0.0070297
+Node ID 189 Node type: 1 Time: 0.00162448
+Node ID 192 Node type: 2 Time: 0.0124146
+Node ID 197 Node type: 1 Time: 0.00584741
+Node ID 198 Node type: 9 Time: 0.0227089
+Node ID 199 Node type: 5 Time: 0.00434688
+Node ID 200 Node type: 0 Time: 0.00257136
+Node ID 202 Node type: 2 Time: 0.00940002
+Node ID 207 Node type: 1 Time: 0.00313959
+Node ID 210 Node type: 2 Time: 0.0322683
+Node ID 215 Node type: 1 Time: 0.00317501
+Node ID 218 Node type: 2 Time: 0.0264204
+Node ID 223 Node type: 1 Time: 0.0117214
+Node ID 225 Node type: 2 Time: 0.0309376
+Node ID 230 Node type: 1 Time: 0.01175
+Node ID 231 Node type: 5 Time: 0.00879168
+Node ID 232 Node type: 0 Time: 0.0051047
+Node ID 234 Node type: 2 Time: 0.0129808
+Node ID 239 Node type: 1 Time: 0.0031474
+Node ID 242 Node type: 2 Time: 0.0320782
+Node ID 247 Node type: 1 Time: 0.00319688
+Node ID 250 Node type: 2 Time: 0.0262626
+Node ID 255 Node type: 1 Time: 0.0117938
+Node ID 256 Node type: 5 Time: 0.00894116
+Node ID 257 Node type: 0 Time: 0.00521407
+Node ID 259 Node type: 2 Time: 0.0137568
+Node ID 264 Node type: 1 Time: 0.00332761
+Node ID 267 Node type: 2 Time: 0.0339079
+Node ID 272 Node type: 1 Time: 0.00321251
+Node ID 275 Node type: 2 Time: 0.0262266
+Node ID 280 Node type: 1 Time: 0.0136448
+Node ID 281 Node type: 5 Time: 0.0093495
+Node ID 282 Node type: 0 Time: 0.00564012
+Node ID 284 Node type: 2 Time: 0.0135594
+Node ID 289 Node type: 1 Time: 0.00322761
+Node ID 292 Node type: 2 Time: 0.0342261
+Node ID 297 Node type: 1 Time: 0.00317605
+Node ID 300 Node type: 2 Time: 0.0273073
+Node ID 305 Node type: 1 Time: 0.0117964
+Node ID 306 Node type: 5 Time: 0.009187
+Node ID 307 Node type: 0 Time: 0.00522814
+Node ID 309 Node type: 2 Time: 0.0135229
+Node ID 314 Node type: 1 Time: 0.00317449
+Node ID 317 Node type: 2 Time: 0.0346464
+Node ID 322 Node type: 1 Time: 0.00318386
+Node ID 325 Node type: 2 Time: 0.0272089
+Node ID 330 Node type: 1 Time: 0.0117735
+Node ID 331 Node type: 5 Time: 0.00906096
+Node ID 332 Node type: 0 Time: 0.00526459
+Node ID 334 Node type: 2 Time: 0.0137604
+Node ID 339 Node type: 1 Time: 0.00336824
+Node ID 342 Node type: 2 Time: 0.0081922
+Node ID 347 Node type: 1 Time: 0.00175677
+Node ID 350 Node type: 2 Time: 0.00832606
+Node ID 355 Node type: 1 Time: 0.00594272
+Node ID 356 Node type: 9 Time: 0.0194063
+Node ID 357 Node type: 5 Time: 0.00721356
+Node ID 358 Node type: 0 Time: 0.00412866
+Node ID 360 Node type: 2 Time: 0.00844377
+Node ID 365 Node type: 1 Time: 0.00321251
+Node ID 368 Node type: 2 Time: 0.0855533
+Node ID 373 Node type: 1 Time: 0.00368751
+Node ID 376 Node type: 2 Time: 0.0207943
+Node ID 381 Node type: 1 Time: 0.0120422
+Node ID 383 Node type: 2 Time: 0.0302949
+Node ID 388 Node type: 1 Time: 0.0121094
+Node ID 389 Node type: 5 Time: 0.0151297
+Node ID 390 Node type: 0 Time: 0.00853908
+Node ID 392 Node type: 2 Time: 0.0164985
+Node ID 397 Node type: 1 Time: 0.00326303
+Node ID 400 Node type: 2 Time: 0.0905773
+Node ID 405 Node type: 1 Time: 0.00336199
+Node ID 408 Node type: 2 Time: 0.02165
+Node ID 413 Node type: 1 Time: 0.0120401
+Node ID 414 Node type: 5 Time: 0.0150172
+Node ID 415 Node type: 0 Time: 0.00832137
+Node ID 417 Node type: 2 Time: 0.0167766
+Node ID 422 Node type: 1 Time: 0.00356303
+Node ID 425 Node type: 2 Time: 0.091007
+Node ID 430 Node type: 1 Time: 0.00346876
+Node ID 433 Node type: 2 Time: 0.021137
+Node ID 438 Node type: 1 Time: 0.01205
+Node ID 439 Node type: 5 Time: 0.0149677
+Node ID 440 Node type: 0 Time: 0.00843908
+Node ID 441 Node type: 9 Time: 0.0154256
+Node ID 444 Node type: 2 Time: 0.00376824
+Node ID 445 Node type: 6 Time: 0.000931773
+Node ID 446 Node type: 12 Time: 0.000395314
+Cost:	2.90873
+
+
+Test passed
