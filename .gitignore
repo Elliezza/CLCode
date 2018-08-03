@@ -1,4 +1,9 @@
-#Exclude everything build
+#Exclude everything else
+/*
+!/ComputeLibrary
+!/ComputeLibraryopt
 build/
 *.sh
 *.log
+log/
+*.swp
