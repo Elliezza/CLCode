@@ -249,8 +249,16 @@ public:
     void do_run() override
     {
         // Run graph
-        for (int i=0; i<50; i++)
+        auto tbegin = std::chrono::high_resolution_clock::now();          
+	for (int i=0; i<10; i++)
         graph.run();
+	
+	auto tend = std::chrono::high_resolution_clock::now();
+	double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
+        double cost = cost0/10;
+	//double cost = cost0;
+	std::cout << "COST:" << cost << std::endl;
+
     }
 
 private:
@@ -264,12 +272,12 @@ private:
  */
 int main(int argc, char **argv)
 {
-	cpu_set_t cpuset;
+/*	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
 	CPU_SET(4, &cpuset);
 	int e = sched_setaffinity(getpid(), sizeof(cpuset), &cpuset);
 	if(e !=0) {
 		std::cout << "Error in setting sched_setaffinity \n";
-	}
+	}*/
     return arm_compute::utils::run_example<GraphVGG16Example>(argc, argv);
 }

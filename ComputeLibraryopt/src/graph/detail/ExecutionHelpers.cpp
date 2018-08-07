@@ -255,13 +255,14 @@ void call_all_tasks(ExecutionWorkload &workload)
 
 	    //std::cout << "Node ID, Node type, Time"  << std::endl;
     // Execute tasks
+    std::cout << "call_all_tasks ... " << std::endl;
+    std::cout << "Test for graph ID: " << workload.graph->id().get() << std::endl;
     for(auto &task : workload.tasks)
     {
 	    /*
 	     * cout << task.node->name() << 
 	     */
 	    auto tbegin = std::chrono::high_resolution_clock::now(); 
-        //for(int i=0; i<10; i++)
 	       	task();
 	    auto tend = std::chrono::high_resolution_clock::now(); 
 	    double cost = std::chrono::duration_cast<std::chrono::duration<double>> (tend - tbegin).count();

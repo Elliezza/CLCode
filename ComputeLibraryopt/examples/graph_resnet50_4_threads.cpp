@@ -27,7 +27,7 @@
 #include "utils/Utils.h"
 #include <sched.h>
 #include <unistd.h>
-
+#include <thread>
 #include <cstdlib>
 
 using namespace arm_compute::utils;
@@ -101,7 +101,6 @@ public:
 
         graph << target_hint
               << fast_math_hint
-              //<< InputLayer(TensorDescriptor(TensorShape(448U, 448U, 3U, 1U), DataType::F32),
 	      << InputLayer(TensorDescriptor(TensorShape(224U, 224U, 3U, 1U), DataType::F32),
                             get_input_accessor(image, std::move(preprocessor), false /* Do not convert to BGR */))
               << ConvolutionLayer(
@@ -149,21 +148,46 @@ public:
 //	    graph.run();
 //	}    
 //   }
+    
+    
     void do_run() override
     {
-        // Run graph
-       auto tbegin = std::chrono::high_resolution_clock::now();
-       for(int i=0; i<10; i++){
-        graph.run();
+        // Creating 4 threads to run on 4 big cores
+	std::cout << "Start running of the graph" << std::endl;
+	int num_cores =4;
+	auto tbegin = std::chrono::high_resolution_clock::now();
+       
+	int k = 4; //starting from big cores
+       std::vector<std::thread> workers(num_cores);
+       for(int i = 0; i < num_cores; ++i){
+	       workers[i] = std::thread([&]{
+		{
+			std::cout << "Creating new threads: " << i << " on CPU:" << sched_getcpu() << std::endl;
+			for (int j = 0; j < 10; j++) graph.run();
+		}});
+	       cpu_set_t cpuset;
+	       CPU_ZERO(&cpuset);
+	       CPU_SET((k+i), &cpuset);
+	       int rc= pthread_setaffinity_np(workers[i].native_handle(), sizeof(cpu_set_t), &cpuset);
+	       if (rc !=0) std::cout << "Error in setting affinity for thread " << i << std::endl;
        }
+
+       for(auto&t: workers) t.join();	
+
        auto tend = std::chrono::high_resolution_clock::now();
        double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
-       double cost = cost0/10;
+       double cost = cost0/40;
 //	double cost = cost0;
        std::cout << "COST:" << cost << std::endl;
     }
+
+
 private:
     Stream graph{ 0, "ResNet50" };
+    Stream graph2{ 1, "ResNet50" };
+
+//    std::vector<Stream> graphs;
+//    for (int i = 0; i < 4; ++i) graphs.push_back(Stream(i, "ResNet50"));
 
     void add_residual_block(const std::string &data_path, const std::string &name, unsigned int base_depth, unsigned int num_units, unsigned int stride)
     {
@@ -266,6 +290,12 @@ private:
     }
 };
 
+
+//void GraphResNet50Example::thread_worker(){
+//	graph.run();
+//	return NULL;
+//}
+
 /** Main program for ResNet50
  *
  * @param[in] argc Number of arguments
@@ -273,13 +303,13 @@ private:
  */
 int main(int argc, char **argv)
 {
-/*	cpu_set_t cpuset;
-	CPU_ZERO(&cpuset);
-	CPU_SET(4, &cpuset);
-	int e = sched_setaffinity(getpid(), sizeof(cpuset), &cpuset);
-	if(e !=0) {
-		std::cout << "Error in setting sched_setaffinity \n";
-	}
-*/
+	//cpu_set_t cpuset;
+	//CPU_ZERO(&cpuset);
+	//CPU_SET(4, &cpuset);
+	//int e = sched_setaffinity(getpid(), sizeof(cpuset), &cpuset);
+	//if(e !=0) {
+	//	std::cout << "Error in setting sched_setaffinity \n";
+	//}
+
     return arm_compute::utils::run_example<GraphResNet50Example>(argc, argv);
 }

@@ -181,12 +181,14 @@ CPPScheduler::CPPScheduler()
     : _num_threads(num_threads_hint()),
       _threads(_num_threads)
 {
-    unsigned int i, j;
-    int rc;
-     
+    //unsigned int i, j;
+    //int rc;
+
+    get_cpu_configuration(_cpu_info);
+    std::cout << "No. of threads? " << num_threads_hint() << std::endl; 
 //double _factor = 1; //lets assume big cores are "factor" faster than little
 // factor is read from file
-    std::ifstream iffactor;
+ /*   std::ifstream iffactor;
     iffactor.open("/root/.hikey960/factor", std::ios::in);
     if(iffactor.is_open()){
 	    std::string line;
@@ -223,7 +225,7 @@ CPPScheduler::CPPScheduler()
                         }
                         ++thread_it; j++;
                     }
-            }
+            }*/
             //last thread should be assigned to last core
             //Hoping it would be big core
 	    /*
@@ -237,8 +239,9 @@ CPPScheduler::CPPScheduler()
                             }
                     }
             }
-	    */
+	    
     } //else no pinning
+    */
 
 }
 
@@ -261,6 +264,11 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
     ThreadInfo info;
     info.cpu_info = &_cpu_info;
 
+    std::cout << kernel->name() << std::endl;
+    std::cout << "-1, " << get_workload(kernel->window()) << std::endl;
+    kernel->run(kernel->window(), info);
+
+/*
     bool conv = true;
     const Window      &max_window     = kernel->window();
     const unsigned int num_iterations = max_window.num_iterations(split_dimension);
@@ -272,7 +280,7 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
     std::string target_kernel5 ("NESeparableConvolutionVertKernel");
     std::string target_kernel6 ("NEWeightsReshapeKernel");  
     std::string target_kernel7 ("NEGEMMMatrixMultiplyKernel"); 
-    
+   */ 
     /*if(get_workload(max_window) < 32) {
 	    info.num_threads = 1;
     } else */
@@ -280,7 +288,7 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
 /*    if((target_kernel.compare(kernel->name()) != 0) || (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
 	    info.num_threads = std::min(info.num_threads, 4);
    }
-*/
+
     if(((target_kernel.compare(kernel->name()) != 0) && (target_kernel2.compare(kernel->name()) != 0) && (target_kernel3.compare(kernel->name()) != 0) && (target_kernel4.compare(kernel->name()) != 0) 
     && (target_kernel5.compare(kernel->name()) != 0) ) && (target_kernel6.compare(kernel->name()) != 0) && (target_kernel7.compare(kernel->name()) != 0) )
     {
@@ -289,7 +297,8 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
     }
 
     info.num_threads = std::min(info.num_threads, 4); //always 4 threads created
-/*
+*/
+    /*
     if((target_kernel.compare(kernel->name()) == 0) && (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
             info.num_threads = std::min(info.num_threads, 4);
     }
@@ -298,20 +307,18 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
 /*    if(get_workload(max_window) < 4096){ //32000, 100352, 25800, 16384) {
 		            info.num_threads = std::min(info.num_threads,4);
 	}*/
-
+/*
     if(num_iterations == 0)
     {
         return;
     }
 
     std::cout << kernel->name() << std::endl;
-    if(!kernel->is_parallelisable() || info.num_threads == 1)
+*/
+    /*if(!kernel->is_parallelisable() || info.num_threads == 1)
     {
 	std::cout << "-1, " << get_workload(max_window) << std::endl;
         kernel->run(max_window, info);
-	//auto thread_it = _threads.begin();
-	//thread_it->start(kernel, max_window,info);
-	//std::cout << "-1, " << get_workload(max_window) << " on core: " << thread_it->getId() << std::endl;
     }
     else
     {
@@ -363,7 +370,7 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
 
 	//	std::cout<< "thread to core:" << thread_it->getId() << std::endl;
 	}
-
+*/
         // Run last part on main thread
 	/*
 	if(_cpu_info.targetCPU.targetCPUHint) {
@@ -378,7 +385,7 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
 		std::cout << t << ", " << get_workload(win) << std::endl;
 	}
 	*/
-
+/*
         try
         {
             for(auto &thread : _threads)
@@ -390,7 +397,7 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
         {
             std::cerr << "Caught system_error with code " << e.code() << " meaning " << e.what() << '\n';
         }
-    }
+    }*/
     /** [Scheduler example] */
 }
 } // namespace arm_compute

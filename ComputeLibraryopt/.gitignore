@@ -1,0 +1,10 @@
+#Exclude everything else
+build/
+*.sh
+*.log*
+log/
+*.swp
+*bkp
+*ppm
+examples_mod/
+log*

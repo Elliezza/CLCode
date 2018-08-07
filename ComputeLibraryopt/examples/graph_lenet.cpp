@@ -123,11 +123,25 @@ public:
         config.use_tuner = (target == 2);
         graph.finalize(target_hint, config);
     }
-    void do_run() override
-    {
-        // Run graph
-        graph.run();
-    }
+//    void do_run() override
+//    {
+//        // Run graph
+//        graph.run();
+//    }
+
+     void do_run() override
+     {
+	     // Run graph
+	  auto tbegin = std::chrono::high_resolution_clock::now();
+	  for(int i=0; i<10; i++){
+		  graph.run();
+	  }
+	  auto tend = std::chrono::high_resolution_clock::now();
+	  double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
+	  double cost = cost0/10;
+	  //double cost = cost0;
+	  std::cout << "COST:" << cost << std::endl;
+     }
 
 private:
     Stream graph{ 0, "LeNet" };
