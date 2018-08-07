@@ -2,6 +2,7 @@
 /*
 !/ComputeLibrary
 !/ComputeLibraryopt
+!/ComputeLibrarypip
 build/
 *.sh
 *.log
