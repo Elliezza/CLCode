@@ -196,12 +196,12 @@ public:
         // Run graph
 	    std::cout << "Starting of running the kernel" << std::endl;
 	auto tbegin = std::chrono::high_resolution_clock::now();
-       for(int i=0; i<10; i++){
+       for(int i=0; i<1; i++){
         graph.run();
        }
        auto tend = std::chrono::high_resolution_clock::now();
        double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
-       double cost = cost0/10;
+       double cost = cost0/1;
        //double cost = cost0;
 
        std::cout << "COST:" << cost << std::endl;

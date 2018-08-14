@@ -181,14 +181,15 @@ CPPScheduler::CPPScheduler()
     : _num_threads(num_threads_hint()),
       _threads(_num_threads)
 {
-    //unsigned int i, j;
-    //int rc;
+    unsigned int i, j;
+    int rc;
 
     get_cpu_configuration(_cpu_info);
     std::cout << "No. of threads? " << num_threads_hint() << std::endl; 
-//double _factor = 1; //lets assume big cores are "factor" faster than little
+
+    double _factor = 1; //lets assume big cores are "factor" faster than little
 // factor is read from file
- /*   std::ifstream iffactor;
+    std::ifstream iffactor;
     iffactor.open("/root/.hikey960/factor", std::ios::in);
     if(iffactor.is_open()){
 	    std::string line;
@@ -199,18 +200,18 @@ CPPScheduler::CPPScheduler()
     }
 
     std::cout << "Factor setting: " << _factor << std::endl;    
-    get_cpu_configuration(_cpu_info);
     if(_cpu_info.targetCPU.targetCPUHint) {
             //target CPU Hint is present. Therefore pin threads to core.
 
             //resize the number of threads to the available cores
-            set_num_threads(_cpu_info.targetCPU.get_avail_cores());
+            //set_num_threads(_cpu_info.targetCPU.get_avail_cores());
 
             cpu_set_t cpuset;
             CPU_ZERO(&cpuset); //clearing cpuset
             auto thread_it =  _threads.begin();
 
-            //first assign num_thread - 1
+	    std::cout << "Number of threads: " << _num_threads << std::endl;
+	    //first assign num_thread - 1
             //i is proc id
             //j is thread id
 	    for(i=0, j=0; j < _num_threads; i++) {
@@ -225,7 +226,7 @@ CPPScheduler::CPPScheduler()
                         }
                         ++thread_it; j++;
                     }
-            }*/
+            }
             //last thread should be assigned to last core
             //Hoping it would be big core
 	    /*
@@ -238,10 +239,10 @@ CPPScheduler::CPPScheduler()
                                    std::cout << "Error calling pthread_setaffinit_np: " << rc << std::endl;
                             }
                     }
-            }
+            }*/
 	    
     } //else no pinning
-    */
+    
 
 }
 
@@ -269,7 +270,7 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
     kernel->run(kernel->window(), info);
 
 /*
-    bool conv = true;
+    //bool conv = true;
     const Window      &max_window     = kernel->window();
     const unsigned int num_iterations = max_window.num_iterations(split_dimension);
     info.num_threads                  = std::min(num_iterations, _num_threads);
@@ -279,25 +280,25 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
     std::string target_kernel4 ("NESeparableConvolutionHorKernel");
     std::string target_kernel5 ("NESeparableConvolutionVertKernel");
     std::string target_kernel6 ("NEWeightsReshapeKernel");  
-    std::string target_kernel7 ("NEGEMMMatrixMultiplyKernel"); 
-   */ 
+    std::string target_kernel7 ("NEGEMMMatrixMultiplyKernel"); */
+   
     /*if(get_workload(max_window) < 32) {
 	    info.num_threads = 1;
     } else */
     
-/*    if((target_kernel.compare(kernel->name()) != 0) || (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
+   /* if((target_kernel.compare(kernel->name()) != 0) || (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
 	    info.num_threads = std::min(info.num_threads, 4);
-   }
-
+   }*/
+/*
     if(((target_kernel.compare(kernel->name()) != 0) && (target_kernel2.compare(kernel->name()) != 0) && (target_kernel3.compare(kernel->name()) != 0) && (target_kernel4.compare(kernel->name()) != 0) 
-    && (target_kernel5.compare(kernel->name()) != 0) ) && (target_kernel6.compare(kernel->name()) != 0) && (target_kernel7.compare(kernel->name()) != 0) )
+    && (target_kernel5.compare(kernel->name()) != 0) ) && (target_kernel6.compare(kernel->name()) != 0) )//&& (target_kernel7.compare(kernel->name()) != 0) )
     {
-            info.num_threads = std::min(info.num_threads, 4);
-	    conv = false;
-    }
+            info.num_threads = std::min(info.num_threads, 1);
+	   // conv = false;
+    }*/
 
-    info.num_threads = std::min(info.num_threads, 4); //always 4 threads created
-*/
+ //   info.num_threads = std::min(info.num_threads, 4); //always 4 threads created
+
     /*
     if((target_kernel.compare(kernel->name()) == 0) && (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
             info.num_threads = std::min(info.num_threads, 4);
@@ -313,9 +314,9 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
         return;
     }
 
-    std::cout << kernel->name() << std::endl;
-*/
-    /*if(!kernel->is_parallelisable() || info.num_threads == 1)
+  //  std::cout << kernel->name() << std::endl;
+
+    if(!kernel->is_parallelisable() || info.num_threads == 1)
     {
 	std::cout << "-1, " << get_workload(max_window) << std::endl;
         kernel->run(max_window, info);
@@ -344,18 +345,18 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
         }
         t =0;
 
-	if (!conv) {thread_it = _threads.begin();}
+	//if (!conv) {thread_it = _threads.begin();}
 
         
 	for(; t < info.num_threads; ++t, ++thread_it)
         {
 		if(_cpu_info.targetCPU.targetCPUHint) {
 			Window win;
-			if (conv){
+			//if (conv){
 				win     = max_window.split_window(split_dimension, t, nBig, nLittle, true, _factor);
-			} else {
-				win     = max_window.split_window(split_dimension, t, nLittle, nBig, true, _factor);
-			}
+			//} else {
+			//	win     = max_window.split_window(split_dimension, t, nLittle, nBig, true, _factor);
+			//}
 			info.thread_id = t;
 			if(get_workload(win) != 0)
 				thread_it->start(kernel, win, info);

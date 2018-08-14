@@ -43,6 +43,7 @@ using namespace arm_compute::graph_utils;
  */
 class GraphAlexnetExample : public Example
 {
+
 public:
     void do_setup(int argc, char **argv) override
     {
@@ -481,7 +482,7 @@ graph5 << target_hint
 	{
 	// Creating 4 threads to run on 4 big cores
 	std::cout << "Start running of the graph" << std::endl;
-        int num_cores =4;
+        int num_cores =2;
         auto tbegin = std::chrono::high_resolution_clock::now();
         int k = 4; //starting from big cores
         std::vector<std::thread> workers(num_cores);
@@ -503,10 +504,10 @@ graph5 << target_hint
             }});
 	cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
-        CPU_SET((k+i), &cpuset);
+        CPU_SET((k+(i/2)), &cpuset);
         int rc= pthread_setaffinity_np(workers[i].native_handle(), sizeof(cpu_set_t), &cpuset);
         if (rc !=0) std::cout << "Error in setting affinity for thread " << i << std::endl;
-        std::cout << " Threads: " << i << " on CPU: " << (k+i) <<", actually on: " << sched_getcpu() << std::endl;
+        //std::cout << " Threads: " << i << " on CPU: " << (k+i) <<", actually on: " << sched_getcpu() << std::endl;
         }
 	
 	for(auto&t: workers) t.join();

@@ -99,11 +99,14 @@ void call_all_const_node_accessors(Graph &g);
  * @param[in] workload Workload to execute
  */
 void call_all_input_node_accessors(ExecutionWorkload &workload);
+void call_all_input_node_accessors_2(ExecutionWorkload workload);
 /** Call all output node accessors
  *
  * @param[in] workload Workload to execute
  */
 void call_all_output_node_accessors(ExecutionWorkload &workload);
+void call_all_output_node_accessors_2(ExecutionWorkload workload);
+
 /** Prepares all tasks for execution
  *
  * @param[in] workload Workload to prepare
@@ -114,6 +117,7 @@ void prepare_all_tasks(ExecutionWorkload &workload);
  * @param[in] workload Workload to execute
  */
 void call_all_tasks(ExecutionWorkload &workload);
+void call_all_tasks_2(ExecutionWorkload workload);
 } // namespace detail
 } // namespace graph
 } // namespace arm_compute

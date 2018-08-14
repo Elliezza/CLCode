@@ -76,6 +76,7 @@ public:
      *
      * @param[in] graph Graph to invalidate
      */
+    void execute_workload(GraphID _id);
     void invalidate_graph(Graph &graph);
 
 private:

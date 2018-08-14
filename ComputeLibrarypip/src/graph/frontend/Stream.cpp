@@ -33,7 +33,7 @@ namespace graph
 namespace frontend
 {
 Stream::Stream(size_t id, std::string name)
-    : _manager(), _ctx(), _g(id, std::move(name))
+    : _manager(), _ctx(), _g(id, std::move(name)) 
 {
 }
 
@@ -44,9 +44,28 @@ void Stream::finalize(Target target, const GraphConfig &config)
     _manager.finalize_graph(_g, _ctx, pm, target);
 }
 
-void Stream::run()
+void Stream::run() //execution of graph.run()
 {
+  /*  int num_threads =2;
+    std::vector<std::thread> workers(num_threads);
+    for(int i = 0; i < num_threads; ++i){
+    	workers[i] = std::thread([&, i]{
+		std::cout << "Creating new threads: " << i << " on CPU:" << sched_getcpu() << std::endl;
+		for (int j = 0; j < 10; j++) _manager.execute_graph(_g);
+        });
+       cpu_set_t cpuset;
+       CPU_ZERO(&cpuset);
+       CPU_SET((4+i), &cpuset);
+       int rc= pthread_setaffinity_np(workers[i].native_handle(), sizeof(cpu_set_t), &cpuset);
+       if (rc !=0) std::cout << "Error in setting affinity for thread " << i << std::endl;
+       }
+
+    for(auto&t: workers) t.join();
+*/
     _manager.execute_graph(_g);
+   // _manager.execute_graph(_g);
+    //multithreading with different graph ID.
+    //_manager.execute_workload(_g.id());
 }
 
 void Stream::add_layer(ILayer &layer)

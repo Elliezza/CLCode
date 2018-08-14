@@ -201,7 +201,67 @@ public:
               << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name("conv1/Relu")
               << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 3, PadStrideInfo(2, 2, 0, 1, 0, 1, DimensionRoundingType::FLOOR))).set_name("pool1/MaxPool");
 
+	graph6 << target_hint
+		<< fast_math_hint
+		<< InputLayer(TensorDescriptor(TensorShape(224U, 224U, 3U, 1U), DataType::F32),
+				get_input_accessor(image, std::move(preprocessor), false /* Do not convert to BGR */))
+		<< ConvolutionLayer(
+				7U, 7U, 64U,
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_weights.npy"),
+				std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				PadStrideInfo(2, 2, 3, 3))
+		.set_name("conv1/convolution")
+		<< BatchNormalizationLayer(
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_moving_mean.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_moving_variance.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_gamma.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_beta.npy"),
+				0.0000100099996416f)
+		.set_name("conv1/BatchNorm")
+		<< ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name("conv1/Relu")
+		<< PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 3, PadStrideInfo(2, 2, 0, 1, 0, 1, DimensionRoundingType::FLOOR))).set_name("pool1/MaxPool");
 
+
+	graph7 << target_hint
+		<< fast_math_hint
+		<< InputLayer(TensorDescriptor(TensorShape(224U, 224U, 3U, 1U), DataType::F32),
+				get_input_accessor(image, std::move(preprocessor), false /* Do not convert to BGR */))
+		<< ConvolutionLayer(
+				7U, 7U, 64U,
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_weights.npy"),
+				std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				PadStrideInfo(2, 2, 3, 3))
+		.set_name("conv1/convolution")
+		<< BatchNormalizationLayer(
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_moving_mean.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_moving_variance.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_gamma.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_beta.npy"),
+				0.0000100099996416f)
+		.set_name("conv1/BatchNorm")
+		<< ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name("conv1/Relu")
+		<< PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 3, PadStrideInfo(2, 2, 0, 1, 0, 1, DimensionRoundingType::FLOOR))).set_name("pool1/MaxPool");
+
+
+	graph8 << target_hint
+		<< fast_math_hint
+		<< InputLayer(TensorDescriptor(TensorShape(224U, 224U, 3U, 1U), DataType::F32),
+				get_input_accessor(image, std::move(preprocessor), false /* Do not convert to BGR */))
+		<< ConvolutionLayer(
+				7U, 7U, 64U,
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_weights.npy"),
+				std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				PadStrideInfo(2, 2, 3, 3))
+		.set_name("conv1/convolution")
+		<< BatchNormalizationLayer(
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_moving_mean.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_moving_variance.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_gamma.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/conv1_BatchNorm_beta.npy"),
+				0.0000100099996416f)
+		.set_name("conv1/BatchNorm")
+		<< ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name("conv1/Relu")
+		<< PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 3, PadStrideInfo(2, 2, 0, 1, 0, 1, DimensionRoundingType::FLOOR))).set_name("pool1/MaxPool");
 
 	add_residual_block(data_path, "block1", 64, 3, 2);
         add_residual_block(data_path, "block2", 128, 4, 2);
@@ -262,8 +322,40 @@ public:
               << SoftmaxLayer().set_name("predictions/Softmax")
               << OutputLayer(get_output_accessor(label, 5));
 
+	graph6 << PoolingLayer(PoolingLayerInfo(PoolingType::AVG)).set_name("pool5")
+		<< ConvolutionLayer(
+				1U, 1U, 1000U,
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/logits_weights.npy"),
+				get_weights_accessor(data_path, "/cnn_data/resnet50_model/logits_biases.npy"),
+				PadStrideInfo(1, 1, 0, 0))
+		.set_name("logits/convolution")
+		<< FlattenLayer().set_name("predictions/Reshape")
+		<< SoftmaxLayer().set_name("predictions/Softmax")
+		<< OutputLayer(get_output_accessor(label, 5));
 
-        // Finalize graph
+	graph7 << PoolingLayer(PoolingLayerInfo(PoolingType::AVG)).set_name("pool5")
+	<< ConvolutionLayer(
+			1U, 1U, 1000U,
+			get_weights_accessor(data_path, "/cnn_data/resnet50_model/logits_weights.npy"),
+			get_weights_accessor(data_path, "/cnn_data/resnet50_model/logits_biases.npy"),
+			PadStrideInfo(1, 1, 0, 0))
+	.set_name("logits/convolution")
+	<< FlattenLayer().set_name("predictions/Reshape")
+	<< SoftmaxLayer().set_name("predictions/Softmax")
+	<< OutputLayer(get_output_accessor(label, 5));
+
+	graph8 << PoolingLayer(PoolingLayerInfo(PoolingType::AVG)).set_name("pool5")
+	<< ConvolutionLayer(
+			1U, 1U, 1000U,
+			get_weights_accessor(data_path, "/cnn_data/resnet50_model/logits_weights.npy"),
+			get_weights_accessor(data_path, "/cnn_data/resnet50_model/logits_biases.npy"),
+			PadStrideInfo(1, 1, 0, 0))
+	.set_name("logits/convolution")
+	<< FlattenLayer().set_name("predictions/Reshape")
+	<< SoftmaxLayer().set_name("predictions/Softmax")
+	<< OutputLayer(get_output_accessor(label, 5));
+        
+	// Finalize graph
         GraphConfig config;
         config.use_tuner = (target == 2);
         graph.finalize(target_hint, config);
@@ -271,13 +363,17 @@ public:
 	graph3.finalize(target_hint, config);
 	graph4.finalize(target_hint, config);
 	graph5.finalize(target_hint, config);
+	graph6.finalize(target_hint, config);
+	graph7.finalize(target_hint, config);
+	graph8.finalize(target_hint, config);
+
     }
 
     void do_run() override
     {
         // Creating 4 threads to run on 4 big cores
 	std::cout << "Start running of the graph" << std::endl;
-	int num_cores =4;
+	int num_cores = 8;
 	auto tbegin = std::chrono::high_resolution_clock::now();
        
 	int k = 4; //starting from big cores
@@ -294,24 +390,27 @@ public:
 				for (int j = 0; j < 10; j++) graph3.run();
 			} else if (i == 3){
 				for (int j = 0; j < 10; j++) graph4.run();
-			} else {
+			} else if (i == 4){
 				for (int j = 0; j < 10; j++) graph5.run();
-			}
-
+			} else if (i == 5){
+				for (int j = 0; j < 10; j++) graph6.run();
+			} else if (i == 6){
+				for (int j = 0; j < 10; j++) graph7.run();
+			} else if (i == 7){
+				for (int j = 0; j < 10; j++) graph8.run();}
 		}});
 	       cpu_set_t cpuset;
 	       CPU_ZERO(&cpuset);
-	       CPU_SET((k+i), &cpuset);
+	       CPU_SET((k+i/2), &cpuset);
 	       int rc= pthread_setaffinity_np(workers[i].native_handle(), sizeof(cpu_set_t), &cpuset);
 	       if (rc !=0) std::cout << "Error in setting affinity for thread " << i << std::endl;
-	       std::cout << " Threads: " << i << " on CPU: " << (k+i) <<", actually on: " << sched_getcpu() << std::endl;
        }
 
        for(auto&t: workers) t.join();	
 
        auto tend = std::chrono::high_resolution_clock::now();
        double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
-       double cost = cost0/40;
+       double cost = cost0/80;
 //	double cost = cost0;
        std::cout << "COST:" << cost << std::endl;
     }
@@ -323,7 +422,10 @@ private:
     Stream graph3{ 2, "ResNet50" };
     Stream graph4{ 3, "ResNet50" };
     Stream graph5{ 4, "ResNet50" };
-    
+    Stream graph6{ 5, "ResNet50" };
+    Stream graph7{ 6, "ResNet50" };
+    Stream graph8{ 7, "ResNet50" }; 
+
 //    std::vector<Stream> graphs;
 //    for (int i = 0; i < 4; ++i) graphs.push_back(Stream(i, "ResNet50"));
 
@@ -351,6 +453,9 @@ private:
 	    SubStream right3(graph3);
 	    SubStream right4(graph4);
 	    SubStream right5(graph5);
+	    SubStream right6(graph6);
+	    SubStream right7(graph7);
+	    SubStream right8(graph8);
 
 	    right << ConvolutionLayer(
                       1U, 1U, base_depth,
@@ -441,139 +546,268 @@ private:
                   .set_name(unit_name + "conv2/BatchNorm");
 
 	    right3 << ConvolutionLayer(
-		                      1U, 1U, base_depth,
-				                            get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
-							                          std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-										                        PadStrideInfo(1, 1, 0, 0))
-	                  .set_name(unit_name + "conv1/convolution")
-			                    << BatchNormalizationLayer(
-							                          get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
-										                        get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
-													                      get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
-															                            get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
-																		                          0.0000100099996416f)
-					                      .set_name(unit_name + "conv1/BatchNorm")
-							                        << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+			    1U, 1U, base_depth,
+			    get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
+			    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+			    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv1/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv1/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
 
-										                  << ConvolutionLayer(
-														                        3U, 3U, base_depth,
-																	                      get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
-																			                            std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-																						                          PadStrideInfo(middle_stride, middle_stride, 1, 1))
-												                    .set_name(unit_name + "conv2/convolution")
-														                      << BatchNormalizationLayer(
-																		                            get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
-																					                          get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
-																								                        get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
-																											                      get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
-																													                            0.0000100099996416f)
-																                        .set_name(unit_name + "conv2/BatchNorm")
-																			                  << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+		    << ConvolutionLayer(
+				    3U, 3U, base_depth,
+				    get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(middle_stride, middle_stride, 1, 1))
+		    .set_name(unit_name + "conv2/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
 
-																					                    << ConvolutionLayer(
-																									                          1U, 1U, base_depth * 4,
-																												                        get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
-																															                      std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-																																	                            PadStrideInfo(1, 1, 0, 0))
-																							                      .set_name(unit_name + "conv3/convolution")
-																									                        << BatchNormalizationLayer(
-																														                      get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
-																																                            get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
-																																			                          get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
-																																						                        get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
-																																									                      0.0000100099996416f)
-																												                  .set_name(unit_name + "conv2/BatchNorm");
-  
-  
+		    << ConvolutionLayer(
+				    1U, 1U, base_depth * 4,
+				    get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv3/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm");
 
-right4 << ConvolutionLayer(
-		                      1U, 1U, base_depth,
-				                            get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
-							                          std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-										                        PadStrideInfo(1, 1, 0, 0))
-	                  .set_name(unit_name + "conv1/convolution")
-			                    << BatchNormalizationLayer(
-							                          get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
-										                        get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
-													                      get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
-															                            get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
-																		                          0.0000100099996416f)
-					                      .set_name(unit_name + "conv1/BatchNorm")
-							                        << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+	    right4 << ConvolutionLayer(
+			    1U, 1U, base_depth,
+			    get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
+			    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+			    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv1/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv1/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
 
-										                  << ConvolutionLayer(
-														                        3U, 3U, base_depth,
-																	                      get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
-																			                            std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-																						                          PadStrideInfo(middle_stride, middle_stride, 1, 1))
-												                    .set_name(unit_name + "conv2/convolution")
-														                      << BatchNormalizationLayer(
-																		                            get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
-																					                          get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
-																								                        get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
-																											                      get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
-																													                            0.0000100099996416f)
-																                        .set_name(unit_name + "conv2/BatchNorm")
-																			                  << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+		    << ConvolutionLayer(
+				    3U, 3U, base_depth,
+				    get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(middle_stride, middle_stride, 1, 1))
+		    .set_name(unit_name + "conv2/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
 
-																					                    << ConvolutionLayer(
-																									                          1U, 1U, base_depth * 4,
-																												                        get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
-																															                      std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-																																	                            PadStrideInfo(1, 1, 0, 0))
-																							                      .set_name(unit_name + "conv3/convolution")
-																									                        << BatchNormalizationLayer(
-																														                      get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
-																																                            get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
-																																			                          get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
-																																						                        get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
-																																									                      0.0000100099996416f)
-																												                  .set_name(unit_name + "conv2/BatchNorm");
+		    << ConvolutionLayer(
+				    1U, 1U, base_depth * 4,
+				    get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv3/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm");
 
+	    right5 << ConvolutionLayer(
+			    1U, 1U, base_depth,
+			    get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
+			    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+			    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv1/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv1/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
 
-right5 << ConvolutionLayer(
-		                      1U, 1U, base_depth,
-				                            get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
-							                          std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-										                        PadStrideInfo(1, 1, 0, 0))
-	                  .set_name(unit_name + "conv1/convolution")
-			                    << BatchNormalizationLayer(
-							                          get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
-										                        get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
-													                      get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
-															                            get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
-																		                          0.0000100099996416f)
-					                      .set_name(unit_name + "conv1/BatchNorm")
-							                        << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+		    << ConvolutionLayer(
+				    3U, 3U, base_depth,
+				    get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(middle_stride, middle_stride, 1, 1))
+		    .set_name(unit_name + "conv2/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
 
-										                  << ConvolutionLayer(
-														                        3U, 3U, base_depth,
-																	                      get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
-																			                            std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-																						                          PadStrideInfo(middle_stride, middle_stride, 1, 1))
-												                    .set_name(unit_name + "conv2/convolution")
-														                      << BatchNormalizationLayer(
-																		                            get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
-																					                          get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
-																								                        get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
-																											                      get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
-																													                            0.0000100099996416f)
-																                        .set_name(unit_name + "conv2/BatchNorm")
-																			                  << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+		    << ConvolutionLayer(
+				    1U, 1U, base_depth * 4,
+				    get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv3/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm");
 
-																					                    << ConvolutionLayer(
-																									                          1U, 1U, base_depth * 4,
-																												                        get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
-																															                      std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
-																																	                            PadStrideInfo(1, 1, 0, 0))
-																							                      .set_name(unit_name + "conv3/convolution")
-																									                        << BatchNormalizationLayer(
-																														                      get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
-																																                            get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
-																																			                          get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
-																																						                        get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
-																																									                      0.0000100099996416f)
-																												                  .set_name(unit_name + "conv2/BatchNorm");
+	    right6 << ConvolutionLayer(
+			    1U, 1U, base_depth,
+			    get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
+			    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+			    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv1/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv1/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+
+		    << ConvolutionLayer(
+				    3U, 3U, base_depth,
+				    get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(middle_stride, middle_stride, 1, 1))
+		    .set_name(unit_name + "conv2/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+
+		    << ConvolutionLayer(
+				    1U, 1U, base_depth * 4,
+				    get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv3/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm");
+
+	    right7 << ConvolutionLayer(
+			    1U, 1U, base_depth,
+			    get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
+			    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+			    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv1/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv1/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+
+		    << ConvolutionLayer(
+				    3U, 3U, base_depth,
+				    get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(middle_stride, middle_stride, 1, 1))
+		    .set_name(unit_name + "conv2/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+
+		    << ConvolutionLayer(
+				    1U, 1U, base_depth * 4,
+				    get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv3/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm");
+
+	    right8 << ConvolutionLayer(
+			    1U, 1U, base_depth,
+			    get_weights_accessor(data_path, unit_path + "conv1_weights.npy"),
+			    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+			    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv1/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv1_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv1/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+
+		    << ConvolutionLayer(
+				    3U, 3U, base_depth,
+				    get_weights_accessor(data_path, unit_path + "conv2_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(middle_stride, middle_stride, 1, 1))
+		    .set_name(unit_name + "conv2/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv2_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm")
+		    << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "conv1/Relu")
+
+		    << ConvolutionLayer(
+				    1U, 1U, base_depth * 4,
+				    get_weights_accessor(data_path, unit_path + "conv3_weights.npy"),
+				    std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				    PadStrideInfo(1, 1, 0, 0))
+		    .set_name(unit_name + "conv3/convolution")
+		    << BatchNormalizationLayer(
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_mean.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_moving_variance.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_gamma.npy"),
+				    get_weights_accessor(data_path, unit_path + "conv3_BatchNorm_beta.npy"),
+				    0.0000100099996416f)
+		    .set_name(unit_name + "conv2/BatchNorm");
 //formatting issue end
 
             if(i == 0)
@@ -583,6 +817,11 @@ right5 << ConvolutionLayer(
 		SubStream left3(graph3);
 		SubStream left4(graph4);
 		SubStream left5(graph5);
+		SubStream left6(graph6);
+		SubStream left7(graph7);
+		SubStream left8(graph8);
+
+
                 left << ConvolutionLayer(
                          1U, 1U, base_depth * 4,
                          get_weights_accessor(data_path, unit_path + "shortcut_weights.npy"),
@@ -664,6 +903,54 @@ right5 << ConvolutionLayer(
 
                 graph5 << BranchLayer(BranchMergeMethod::ADD, std::move(left5), std::move(right5)).set_name(unit_name + "add");
 
+		left6 << ConvolutionLayer(
+				1U, 1U, base_depth * 4,
+				get_weights_accessor(data_path, unit_path + "shortcut_weights.npy"),
+				std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				PadStrideInfo(1, 1, 0, 0))
+			.set_name(unit_name + "shortcut/convolution")
+			<< BatchNormalizationLayer(
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_moving_mean.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_moving_variance.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_gamma.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_beta.npy"),
+					0.0000100099996416f)
+			.set_name(unit_name + "shortcut/BatchNorm");
+
+		graph6 << BranchLayer(BranchMergeMethod::ADD, std::move(left6), std::move(right6)).set_name(unit_name + "add");
+
+		left7 << ConvolutionLayer(
+				1U, 1U, base_depth * 4,
+				get_weights_accessor(data_path, unit_path + "shortcut_weights.npy"),
+				std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				PadStrideInfo(1, 1, 0, 0))
+			.set_name(unit_name + "shortcut/convolution")
+			<< BatchNormalizationLayer(
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_moving_mean.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_moving_variance.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_gamma.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_beta.npy"),
+					0.0000100099996416f)
+			.set_name(unit_name + "shortcut/BatchNorm");
+
+		graph7 << BranchLayer(BranchMergeMethod::ADD, std::move(left7), std::move(right7)).set_name(unit_name + "add");
+
+		left8 << ConvolutionLayer(
+				1U, 1U, base_depth * 4,
+				get_weights_accessor(data_path, unit_path + "shortcut_weights.npy"),
+				std::unique_ptr<arm_compute::graph::ITensorAccessor>(nullptr),
+				PadStrideInfo(1, 1, 0, 0))
+			.set_name(unit_name + "shortcut/convolution")
+			<< BatchNormalizationLayer(
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_moving_mean.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_moving_variance.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_gamma.npy"),
+					get_weights_accessor(data_path, unit_path + "shortcut_BatchNorm_beta.npy"),
+					0.0000100099996416f)
+			.set_name(unit_name + "shortcut/BatchNorm");
+
+		graph8 << BranchLayer(BranchMergeMethod::ADD, std::move(left8), std::move(right8)).set_name(unit_name + "add");
+
 //formating issue end
 		
             }
@@ -674,17 +961,29 @@ right5 << ConvolutionLayer(
 		SubStream left3(graph3);
 		SubStream left4(graph4);
 		SubStream left5(graph5);
+		SubStream left6(graph6);
+		SubStream left7(graph7);
+		SubStream left8(graph8);
+
                 left << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
 		left2 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
 		left3 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
 		left4 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
 		left5 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
+		left6 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
+		left7 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
+		left8 << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 1, PadStrideInfo(middle_stride, middle_stride, 0, 0), true)).set_name(unit_name + "shortcut/MaxPool");
+
 
                 graph << BranchLayer(BranchMergeMethod::ADD, std::move(left), std::move(right)).set_name(unit_name + "add");
 		graph2 << BranchLayer(BranchMergeMethod::ADD, std::move(left2), std::move(right2)).set_name(unit_name + "add");
 		graph3 << BranchLayer(BranchMergeMethod::ADD, std::move(left3), std::move(right3)).set_name(unit_name + "add");
 		graph4 << BranchLayer(BranchMergeMethod::ADD, std::move(left4), std::move(right4)).set_name(unit_name + "add");
 		graph5 << BranchLayer(BranchMergeMethod::ADD, std::move(left5), std::move(right5)).set_name(unit_name + "add");
+		graph6 << BranchLayer(BranchMergeMethod::ADD, std::move(left6), std::move(right6)).set_name(unit_name + "add");
+		graph7 << BranchLayer(BranchMergeMethod::ADD, std::move(left7), std::move(right7)).set_name(unit_name + "add");
+		graph8 << BranchLayer(BranchMergeMethod::ADD, std::move(left8), std::move(right8)).set_name(unit_name + "add");
+
             }
             else
             {
@@ -693,12 +992,20 @@ right5 << ConvolutionLayer(
 		SubStream left3(graph3);
 		SubStream left4(graph4);
 		SubStream left5(graph5);
+		SubStream left6(graph6);
+		SubStream left7(graph7);
+		SubStream left8(graph8);
+
 
                 graph << BranchLayer(BranchMergeMethod::ADD, std::move(left), std::move(right)).set_name(unit_name + "add");
 		graph2 << BranchLayer(BranchMergeMethod::ADD, std::move(left2), std::move(right2)).set_name(unit_name + "add");
 		graph3 << BranchLayer(BranchMergeMethod::ADD, std::move(left3), std::move(right3)).set_name(unit_name + "add");
 		graph4 << BranchLayer(BranchMergeMethod::ADD, std::move(left4), std::move(right4)).set_name(unit_name + "add");
 		graph5 << BranchLayer(BranchMergeMethod::ADD, std::move(left5), std::move(right5)).set_name(unit_name + "add");
+		graph6 << BranchLayer(BranchMergeMethod::ADD, std::move(left6), std::move(right6)).set_name(unit_name + "add");
+		graph7 << BranchLayer(BranchMergeMethod::ADD, std::move(left7), std::move(right7)).set_name(unit_name + "add");
+		graph8 << BranchLayer(BranchMergeMethod::ADD, std::move(left8), std::move(right8)).set_name(unit_name + "add");
+
             }
 
             graph << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
@@ -706,6 +1013,10 @@ right5 << ConvolutionLayer(
 	    graph3 << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
 	    graph4 << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
 	    graph5 << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
+	    graph6 << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
+	    graph7 << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
+	    graph8 << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name(unit_name + "Relu");
+
 
         }
     }

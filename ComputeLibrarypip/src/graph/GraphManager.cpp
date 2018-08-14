@@ -93,8 +93,13 @@ void GraphManager::finalize_graph(Graph &graph, GraphContext &ctx, PassManager &
     ctx.finalize();
 
     // Register graph
-    _workloads.insert(std::make_pair(graph.id(), std::move(workload)));
+    _workloads.insert(std::make_pair(graph.id(), std::move(workload))); //put ExecutionWorkload into map _workloads which contains ID and workload
     ARM_COMPUTE_LOG_GRAPH_VERBOSE("Created workload for graph with ID : " << graph.id().get() << std::endl);
+
+   /* _workloads.insert(std::make_pair(GraphID(1), std::move(workload))); //creating more workload with same graph with different graph id, assuming initial one is 0 
+    _workloads.insert(std::make_pair(GraphID(2), std::move(workload)));
+    _workloads.insert(std::make_pair(GraphID(3), std::move(workload)));
+    _workloads.insert(std::make_pair(GraphID(4), std::move(workload)));*/
 
     if(forced_target != Target::CL)
     {
@@ -109,17 +114,42 @@ void GraphManager::finalize_graph(Graph &graph, GraphContext &ctx, PassManager &
 void GraphManager::execute_graph(Graph &graph)
 {
     // Check if graph is finalized
-    auto it = _workloads.find(graph.id());
+    auto it = _workloads.find(graph.id());//it is the key-workload tupple, <graphID, ExecutionWorkload>
     ARM_COMPUTE_ERROR_ON_MSG(it == std::end(_workloads), "Graph is not registered!");
 
     // Call input accessors
-    detail::call_all_input_node_accessors(it->second);
+    detail::call_all_input_node_accessors(it->second); //Call the input accessor of the workload. Change the accessors?
 
     // Run graph
     detail::call_all_tasks(it->second);
 
     // Call output accessors
     detail::call_all_output_node_accessors(it->second);
+}
+
+void GraphManager::execute_workload(GraphID _id)
+{
+    auto it = _workloads.find(_id);
+
+    if (it == _workloads.end()) {
+    	std::cout << "Error: graph does not exist!" << std::endl;
+	return;
+    }
+int j = 0;
+    for (auto it=_workloads.begin(); it!=_workloads.end(); ++it){
+    
+	    std::cout <<"Executing for iteration "<< j << std::endl;
+	    ++j;
+    // Call input accessors
+    detail::call_all_input_node_accessors(it->second); //Call the input accessor of the workload. Change the accessors?
+
+    // Run graph
+    detail::call_all_tasks(it->second);
+    
+    // Call output accessors
+    detail::call_all_output_node_accessors(it->second);
+    }
+
 }
 
 void GraphManager::invalidate_graph(Graph &graph)

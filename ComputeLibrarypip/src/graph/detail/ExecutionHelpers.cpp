@@ -33,6 +33,9 @@
 
 #include <chrono>
 #include <iostream>
+#include <fstream>
+#include <string>
+
 namespace arm_compute
 {
 namespace graph
@@ -222,10 +225,23 @@ void call_all_const_node_accessors(Graph &g)
 
 void call_all_input_node_accessors(ExecutionWorkload &workload)
 {
+    std::cout << "Call_all_input_node_accessors" << std::endl;
     for(auto &input : workload.inputs)
     {
         if(input != nullptr)
         {
+		std::cout << "Call_all_input_node_accessors: input !=nullptr" << std::endl;
+            input->call_accessor();
+        }
+    }
+}
+
+void call_all_input_node_accessors_2(ExecutionWorkload workload)
+{
+    for(auto &input : workload.inputs)
+        {
+            if(input != nullptr)
+            {
             input->call_accessor();
         }
     }
@@ -241,9 +257,36 @@ void prepare_all_tasks(ExecutionWorkload &workload)
     }
 }
 
+/*unsigned int _split = 1; //split from layer X
+    // split is read from file
+    std::ifstream iffactor;
+    iffactor.open("/root/.hikey960/split", std::ios::in);
+    if(iffactor.is_open()){
+	    std::string line;
+	    while(bool(getline(iffactor,line))) {
+		    if(line.empty()) continue;
+		    _split = std::stod(line,nullptr);
+	    }
+    }*/
+
+std::mutex allc_mutex_0;
+std::mutex allc_mutex_1;
+std::mutex allc_mutex_2;
+std::mutex allc_mutex_3;
+std::mutex allc_mutex_4;
+std::mutex allc_mutex_5;
+std::mutex allc_mutex_6;
+std::mutex allc_mutex_7;
+std::mutex common_mutex;
+
+cpu_set_t cpuset;
+pthread_t current_thread;
+
 void call_all_tasks(ExecutionWorkload &workload)
 {
    static double total=0, active=0, batch=0, conv=0, dcon =0, depth_conv=0, elt=0, flat=0, fc=0, norm=0, pool=0, reshape=0, scale=0, smax=0, split=0;
+
+    //arm_compute::Mutex _mtx2 = {};                               /**< Mutex */
 
     ARM_COMPUTE_ERROR_ON(workload.ctx == nullptr);
 
@@ -255,20 +298,88 @@ void call_all_tasks(ExecutionWorkload &workload)
             mm_ctx.second.cross_group->acquire();
         }
     }
-
-	    //std::cout << "Node ID, Node type, Time"  << std::endl;
+    
+    unsigned int _split = 1; //split from layer X
+      // split is read from file
+	std::ifstream iffactor;
+	iffactor.open("/root/.hikey960/split", std::ios::in);
+	if(iffactor.is_open()){
+		std::string line;                              
+		while(bool(getline(iffactor,line))) {                                  
+			if(line.empty()) continue;                                                                
+			_split = std::stod(line,nullptr);
+		}                                                                                 
+	}
+	iffactor.close();
+    
+    //std::cout << "Node ID, Node type, Time"  << std::endl;
     // Execute tasks
     std::cout << "call_all_tasks ... " << std::endl;
-    std::cout << "Test for graph ID: " << workload.graph->id().get() << std::endl;
+
     for(auto &task : workload.tasks)
     {
-	    //get_cpu_configuration(_cpu_info);
-	    //std::cout << "Test for hint info: "<< _cpu_info.targetCPU.targetCPUHint << std::endl;
+	   // auto tbegin = std::chrono::high_resolution_clock::now();
+
+	  /*  if((int)task.node->type() == 2) {
+		    	std::cout << "before lock:" << workload.graph->id().get() << sched_getcpu() << std::endl;
+		    	allc_mutex.lock();
+		    	std::cout << "accquire lock:" << workload.graph->id().get() << sched_getcpu() << std::endl;
+			task();
+			allc_mutex.unlock();
+		    	std::cout << "release lock:" << workload.graph->id().get() << sched_getcpu() << std::endl;
+	    } else {
+	    task();
+	    }*/
+
+	    if (&task == &workload.tasks.front()){
+	    	if( (workload.graph->id().get() == 0) || (workload.graph->id().get() == 1) ) 	   {allc_mutex_4.lock();}
+		else if ( (workload.graph->id().get() == 2) || (workload.graph->id().get() == 3) ) {allc_mutex_5.lock();}
+		else if ( (workload.graph->id().get() == 4) || (workload.graph->id().get() == 5) ) {allc_mutex_6.lock();}
+		else if ( (workload.graph->id().get() == 6) || (workload.graph->id().get() == 7) ) {allc_mutex_7.lock();}
+		else { std::cout << "Error in allocating mutex " << sched_getcpu() << std::endl;}
 	    
-	    auto tbegin = std::chrono::high_resolution_clock::now(); 
-	       	task();
-	    auto tend = std::chrono::high_resolution_clock::now(); 
+		common_mutex.lock();
+		CPU_ZERO(&cpuset);
+		CPU_SET( (int) ((workload.graph->id().get())/2 + 4), &cpuset);
+		current_thread = pthread_self();
+		int rc= pthread_setaffinity_np(current_thread, sizeof(cpu_set_t), &cpuset);
+		if (rc !=0) std::cout << "Error in setting affinity for thread " << sched_getcpu() << std::endl;
+		std::cout << "Setting affinity for thread " << sched_getcpu() << std::endl;
+		common_mutex.unlock();
+	    }
+	
+	    auto tbegin = std::chrono::high_resolution_clock::now();
+	    task();
+	    auto tend = std::chrono::high_resolution_clock::now();
 	    double cost = std::chrono::duration_cast<std::chrono::duration<double>> (tend - tbegin).count();
+
+            if(task.node->id() == _split) {
+		    if( (workload.graph->id().get() == 0) || (workload.graph->id().get() == 1) )       {allc_mutex_4.unlock();allc_mutex_0.lock();}
+		    else if ( (workload.graph->id().get() == 2) || (workload.graph->id().get() == 3) ) {allc_mutex_5.unlock();allc_mutex_1.lock();}
+		    else if ( (workload.graph->id().get() == 4) || (workload.graph->id().get() == 5) ) {allc_mutex_6.unlock();allc_mutex_2.lock();}
+		    else if ( (workload.graph->id().get() == 6) || (workload.graph->id().get() == 7) ) {allc_mutex_7.unlock();allc_mutex_3.lock();}
+		    else { std::cout << "Error in unlocking mutex " << sched_getcpu() << std::endl; }
+
+		    common_mutex.lock();
+		    CPU_ZERO(&cpuset);
+		    CPU_SET( (int) (workload.graph->id().get())/2, &cpuset);
+		    current_thread = pthread_self();
+		    int rc= pthread_setaffinity_np(current_thread, sizeof(cpu_set_t), &cpuset);
+		    if (rc !=0) std::cout << "Error in setting affinity for thread " << sched_getcpu() << std::endl;  
+		    std::cout << "Setting affinity for thread " << sched_getcpu() << std::endl;	    
+		    common_mutex.unlock();
+	    }
+
+	    if (&task == &workload.tasks.back()){
+		    std::cout << "Last task in the list!" << std::endl;
+    		    if((workload.graph->id().get() == 0) || (workload.graph->id().get() == 1)) 	 {allc_mutex_0.unlock();}
+    		    else if ((workload.graph->id().get() == 2) || (workload.graph->id().get() == 3)) {allc_mutex_1.unlock();}
+    		    else if ((workload.graph->id().get() == 4) || (workload.graph->id().get() == 5)) {allc_mutex_2.unlock();}
+    		    else if ((workload.graph->id().get() == 6) || (workload.graph->id().get() == 7)) {allc_mutex_3.unlock();}
+    		    else { std::cout << "Error in unlocking mutex " << sched_getcpu() << std::endl; }
+	    }
+
+
 	    std::cout << "Node info: ID: " << task.node->id() << ", type: " << (int) task.node->type() << ", cost: "  << cost << std::endl;
 	    total += cost;
 	    if((int)task.node->type() == 0) active += cost;
@@ -313,8 +424,60 @@ void call_all_tasks(ExecutionWorkload &workload)
         }
     }
 }
-
+ 
+void call_all_tasks_2(ExecutionWorkload workload)
+{
+   static double total=0; //, active=0, batch=0, conv=0, dcon =0, depth_conv=0, elt=0, flat=0, fc=0, norm=0, pool=0, reshape=0, scale=0, smax=0, split=0;
+    
+    ARM_COMPUTE_ERROR_ON(workload.ctx == nullptr);
+    
+    // Acquire memory for the transition buffers
+    for(auto &mm_ctx : workload.ctx->memory_managers())
+    {
+         if(mm_ctx.second.cross_group != nullptr)
+         {
+            mm_ctx.second.cross_group->acquire();
+         }
+    }
+   //std::cout << "Node ID, Node type, Time"  << std::endl;
+   // Execute tasks
+   std::cout << "call_all_tasks ... " << std::endl;
+   for(auto &task : workload.tasks)
+   {
+	 auto tbegin = std::chrono::high_resolution_clock::now();
+	 task();
+         auto tend = std::chrono::high_resolution_clock::now();
+	 double cost = std::chrono::duration_cast<std::chrono::duration<double>> (tend - tbegin).count();
+	 std::cout << "Node info: ID: " << task.node->id() << ", type: " << (int) task.node->type() << ", cost: "  << cost << std::endl;
+         total += cost;
+   }
+   
+   std::cout << "Summary: " << std::endl
+	              << "Total time: " << total << std::endl;
+		      
+    // Release memory for the transition buffers
+    for(auto &mm_ctx : workload.ctx->memory_managers())
+    {
+         if(mm_ctx.second.cross_group != nullptr)
+         {
+            mm_ctx.second.cross_group->release();
+         }
+    }
+}
+    
 void call_all_output_node_accessors(ExecutionWorkload &workload)
+{
+    for(auto &output : workload.outputs)
+    {
+        if(output != nullptr)
+        {
+            output->call_accessor();
+	    std::cout << "Call_all_output_node_accessors: output !=nullptr" << std::endl;
+        }
+    }
+}
+
+void call_all_output_node_accessors_2(ExecutionWorkload workload)
 {
     for(auto &output : workload.outputs)
     {

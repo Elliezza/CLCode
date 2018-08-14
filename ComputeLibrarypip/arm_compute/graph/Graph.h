@@ -206,6 +206,7 @@ public:
      * @return The actual tensor object
      */
     Tensor *tensor(TensorID id);
+    //arm_compute::Mutex _mtx2 = {};                               /**< Mutex used for task execution */
 
 private:
     /** Creates a tensor object
