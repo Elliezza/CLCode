@@ -168,7 +168,7 @@ inline Window Window::split_window(size_t dimension, size_t id, size_t total_big
     ARM_COMPUTE_ERROR_ON(dimension >= Coordinates::num_max_dimensions);
 
     Window out;
-    size_t origid = id;
+ //   size_t origid = id;
 //    double factor = 1; //lets assume big cores are "factor" faster than little
 //    // factor is read from file
 //    std::ifstream iffactor;
@@ -193,7 +193,7 @@ inline Window Window::split_window(size_t dimension, size_t id, size_t total_big
         {
             int start          = _dims[d].start();
             int end            = _dims[d].end();
-	    if(num_iterations(d) <= total_big) {
+	   /* if(num_iterations(d) <= total_big) {
 		    //total = total_big + little;
 		    int per_sub_window = nearbyint(num_iterations(d)*1.0 / total) * _dims[d].step();
 		    start += origid * per_sub_window;
@@ -205,7 +205,8 @@ inline Window Window::split_window(size_t dimension, size_t id, size_t total_big
 //		    int per_big_cluster = (num_iterations(d) / (4 * factor + little))*4*factor;
 //		    per_big_sub_window = (num_iterations(d)/(total_big* factor + little)) * factor * _dimes[d].step(); 
 
-	    }else if(factor != 1 ) { //should be common case
+	    }else */
+	   if(factor != 1 ) { //should be common case
 		    //num_iterations are more than cores, all cores are available
 		    //By default 4 big cores and 4 little cores
 		    //We need to devide work smartly
@@ -254,7 +255,7 @@ inline Window Window::split_window(size_t dimension, size_t id, size_t total_big
 		    {
 			    end = start + per_sub_window;
 		    }
-		    std::cout << "split_window3: " << num_iterations(d) << ":" << total_big << ":" << little << ":" << id << ":" << start << ":" << end << ":" << _dims[d].step() <<  std::endl;
+		    //std::cout << "split_window3: " << num_iterations(d) << ":" << total_big << ":" << little << ":" << id << ":" << start << ":" << end << ":" << _dims[d].step() <<  std::endl;
 
 		    out.set(d, Dimension(start, end, _dims[d].step()));
 	    }

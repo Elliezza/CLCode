@@ -185,64 +185,27 @@ CPPScheduler::CPPScheduler()
     int rc;
 
     get_cpu_configuration(_cpu_info);
-    std::cout << "No. of threads? " << num_threads_hint() << std::endl; 
+    set_num_threads(_cpu_info.targetCPU.get_avail_cores());
 
-    double _factor = 1; //lets assume big cores are "factor" faster than little
-// factor is read from file
-    std::ifstream iffactor;
-    iffactor.open("/root/.hikey960/factor", std::ios::in);
-    if(iffactor.is_open()){
-	    std::string line;
-	    while(bool(getline(iffactor,line))) {
-		    if(line.empty()) continue;
-		    _factor = std::stod(line,nullptr);
-	    }
-    }
-
-    std::cout << "Factor setting: " << _factor << std::endl;    
     if(_cpu_info.targetCPU.targetCPUHint) {
-            //target CPU Hint is present. Therefore pin threads to core.
-
-            //resize the number of threads to the available cores
-            //set_num_threads(_cpu_info.targetCPU.get_avail_cores());
-
             cpu_set_t cpuset;
             CPU_ZERO(&cpuset); //clearing cpuset
             auto thread_it =  _threads.begin();
 
-	    std::cout << "Number of threads: " << _num_threads << std::endl;
-	    //first assign num_thread - 1
-            //i is proc id
-            //j is thread id
 	    for(i=0, j=0; j < _num_threads; i++) {
-                    if(_cpu_info.targetCPU.procAvail[i]) {
-                        CPU_ZERO(&cpuset);
-			CPU_SET(i, &cpuset);
-                        rc = pthread_setaffinity_np(thread_it->get_std_thread().native_handle(),
-                                sizeof(cpu_set_t), &cpuset);
-			thread_it->setId(i);
-                        if(rc != 0) {
-                            std::cout << "Error in calling pthread_setaffinity_np " << rc << std::endl;
-                        }
-                        ++thread_it; j++;
+                    if(_cpu_info.targetCPU.procAvail[i]) {                        
+			    CPU_ZERO(&cpuset);
+    			    CPU_SET(i, &cpuset);
+    			    rc = pthread_setaffinity_np(thread_it->get_std_thread().native_handle(), sizeof(cpu_set_t), &cpuset);
+			    thread_it->setId(i);
+      			    if(rc != 0) {
+				    std::cout << "Error in calling pthread_setaffinity_np " << rc << std::endl;
+    			    }
+  			    ++thread_it; j++;
                     }
             }
-            //last thread should be assigned to last core
-            //Hoping it would be big core
-	    /*
-            for(; i < _cpu_info.targetCPU.procAvail.size(); i++){
-                    if(_cpu_info.targetCPU.procAvail[i]) {
-                            CPU_SET(i, &cpuset);
-                            //rc = pthread_setaffinity_np(pthread_self().native_handle(), sizeof(cpu_set_t), &cpuset);
-                            rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-                            if(rc!=0) {
-                                   std::cout << "Error calling pthread_setaffinit_np: " << rc << std::endl;
-                            }
-                    }
-            }*/
 	    
-    } //else no pinning
-    
+    } 
 
 }
 
@@ -264,51 +227,16 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
     /** [Scheduler example] */
     ThreadInfo info;
     info.cpu_info = &_cpu_info;
+    bool big_cluster=false;
 
-    std::cout << kernel->name() << std::endl;
-    std::cout << "-1, " << get_workload(kernel->window()) << std::endl;
-    kernel->run(kernel->window(), info);
-
-/*
-    //bool conv = true;
     const Window      &max_window     = kernel->window();
     const unsigned int num_iterations = max_window.num_iterations(split_dimension);
     info.num_threads                  = std::min(num_iterations, _num_threads);
-    std::string target_kernel ("NECol2ImKernel");
-    std::string target_kernel2 ("NEIm2ColKernel");
-    std::string target_kernel3 ("NEGEMMAssemblyWrapper");
-    std::string target_kernel4 ("NESeparableConvolutionHorKernel");
-    std::string target_kernel5 ("NESeparableConvolutionVertKernel");
-    std::string target_kernel6 ("NEWeightsReshapeKernel");  
-    std::string target_kernel7 ("NEGEMMMatrixMultiplyKernel"); */
-   
-    /*if(get_workload(max_window) < 32) {
-	    info.num_threads = 1;
-    } else */
-    
-   /* if((target_kernel.compare(kernel->name()) != 0) || (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
-	    info.num_threads = std::min(info.num_threads, 4);
-   }*/
-/*
-    if(((target_kernel.compare(kernel->name()) != 0) && (target_kernel2.compare(kernel->name()) != 0) && (target_kernel3.compare(kernel->name()) != 0) && (target_kernel4.compare(kernel->name()) != 0) 
-    && (target_kernel5.compare(kernel->name()) != 0) ) && (target_kernel6.compare(kernel->name()) != 0) )//&& (target_kernel7.compare(kernel->name()) != 0) )
-    {
-            info.num_threads = std::min(info.num_threads, 1);
-	   // conv = false;
-    }*/
+    info.num_threads = std::min(info.num_threads, 4); //refine threads to 4
 
- //   info.num_threads = std::min(info.num_threads, 4); //always 4 threads created
+  
+    if(sched_getcpu()>3) big_cluster=true; 
 
-    /*
-    if((target_kernel.compare(kernel->name()) == 0) && (get_workload(max_window) < 32000)){ //100352, 25800, 16384) {
-            info.num_threads = std::min(info.num_threads, 4);
-    }
-*/
-
-/*    if(get_workload(max_window) < 4096){ //32000, 100352, 25800, 16384) {
-		            info.num_threads = std::min(info.num_threads,4);
-	}*/
-/*
     if(num_iterations == 0)
     {
         return;
@@ -318,87 +246,43 @@ void CPPScheduler::schedule(ICPPKernel *kernel, unsigned int split_dimension)
 
     if(!kernel->is_parallelisable() || info.num_threads == 1)
     {
-	std::cout << "-1, " << get_workload(max_window) << std::endl;
+//	std::cout << "-1, " << get_workload(max_window) << std::endl;
         kernel->run(max_window, info);
     }
     else
     {
         int  t  = 0;
-        int nBig = 0;
-        int nLittle = 0;
-	int unused = 0;
         auto thread_it = _threads.begin();
-        //if num_threads is less that max possible  _num_threads, 
-        // we will use only the threads that are assigned to big cores
-        if(_num_threads > (unsigned int)info.num_threads) {
-                unused = _num_threads - info.num_threads;
-                for(; t < unused; ++thread_it, ++t);
-                nBig = _cpu_info.targetCPU.get_avail_bigcores(unused);
-		nLittle = _cpu_info.targetCPU.get_avail_littlecores(unused);
-	} else {
 
-		nBig = _cpu_info.targetCPU.get_avail_bigcores(0);
-		nLittle = _cpu_info.targetCPU.get_avail_littlecores(0);
-	}
-        if(_cpu_info.targetCPU.targetCPUHint && (nBig + nLittle != info.num_threads)) {
-                std::cout << "Error: big + little is not equal num_threads\n"; 
-        }
-        t =0;
-
-	//if (!conv) {thread_it = _threads.begin();}
-
+	if(big_cluster) for(t=0; t < 4; ++thread_it, ++t);
         
-	for(; t < info.num_threads; ++t, ++thread_it)
+	for(t=0; t < info.num_threads; ++t, ++thread_it)
         {
-		if(_cpu_info.targetCPU.targetCPUHint) {
-			Window win;
-			//if (conv){
-				win     = max_window.split_window(split_dimension, t, nBig, nLittle, true, _factor);
-			//} else {
-			//	win     = max_window.split_window(split_dimension, t, nLittle, nBig, true, _factor);
-			//}
-			info.thread_id = t;
-			if(get_workload(win) != 0)
-				thread_it->start(kernel, win, info);
-			std::cout << t << ", " << get_workload(win) << " on core: " << thread_it->getId() << std::endl;
-		} else {
-			Window win     = max_window.split_window(split_dimension, t, info.num_threads);
-			info.thread_id = t;
-			if(get_workload(win) != 0)
-				thread_it->start(kernel, win, info);
-			std::cout << t << ", " << get_workload(win) << ", no hint, on core: " << thread_it->getId() << std::endl;
-		}
 
-	//	std::cout<< "thread to core:" << thread_it->getId() << std::endl;
-	}
-*/
-        // Run last part on main thread
-	/*
-	if(_cpu_info.targetCPU.targetCPUHint) {
-		Window win     = max_window.split_window(split_dimension, t, nBig, nLittle, true);
-		info.thread_id = t;
-		kernel->run(win, info);
-		std::cout << t << ", " << get_workload(win) << std::endl;
-	} else {
 		Window win     = max_window.split_window(split_dimension, t, info.num_threads);
 		info.thread_id = t;
-		kernel->run(win, info);
-		std::cout << t << ", " << get_workload(win) << std::endl;
+		if(get_workload(win) != 0)
+			thread_it->start(kernel, win, info);
+					
+//		std::cout << t << ", " << get_workload(win) << ", no hint, on core: " << thread_it->getId() << std::endl;
+
 	}
-	*/
-/*
+
         try
         {
-            for(auto &thread : _threads)
-            {
-                thread.wait();
-            }
+		auto thread = _threads.begin();
+		if(big_cluster) for(t=0; t < 4; ++thread, ++t);
+		
+		for(t=0; t < info.num_threads; ++t, ++thread)
+		{
+			thread->wait();
+		}
         }
         catch(const std::system_error &e)
         {
             std::cerr << "Caught system_error with code " << e.code() << " meaning " << e.what() << '\n';
         }
-    }*/
+    }
     /** [Scheduler example] */
 }
 } // namespace arm_compute

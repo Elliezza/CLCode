@@ -113,19 +113,19 @@ public:
         config.use_tuner = (target == 2);
 	graph0.finalize(target_hint, config);	
         graph1.finalize(target_hint, config);
-	graph2.finalize(target_hint, config);
+/*	graph2.finalize(target_hint, config);
 	graph3.finalize(target_hint, config);
 	graph4.finalize(target_hint, config);
 	graph5.finalize(target_hint, config);
 	graph6.finalize(target_hint, config);
-	graph7.finalize(target_hint, config);
+	graph7.finalize(target_hint, config);*/
     }
 
     void do_run() override
     {
         // Creating 4 threads to run on 4 big cores
 	std::cout << "Start running of the graph" << std::endl;
-	int num_cores = 8;
+	int num_cores = 2;
 	auto tbegin = std::chrono::high_resolution_clock::now();
        
 	int k = 4; //starting from big cores
@@ -138,7 +138,7 @@ public:
 				for (int j = 0; j < 10; j++) graph0.run();
 			} else if (i == 1){  
 				for (int j = 0; j < 10; j++) graph1.run();
-			} else if (i == 2){  
+			} /*else if (i == 2){  
 				for (int j = 0; j < 10; j++) graph2.run();
 			} else if (i == 3){
 				for (int j = 0; j < 10; j++) graph3.run();
@@ -149,7 +149,7 @@ public:
 			} else if (i == 6){
 				for (int j = 0; j < 10; j++) graph6.run();
 			} else if (i == 7){
-				for (int j = 0; j < 10; j++) graph7.run();}
+				for (int j = 0; j < 10; j++) graph7.run();}*/
 		}});
 	       cpu_set_t cpuset;
 	       CPU_ZERO(&cpuset);
@@ -162,7 +162,7 @@ public:
 
        auto tend = std::chrono::high_resolution_clock::now();
        double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
-       double cost = cost0/80;
+       double cost = cost0/20;
        std::cout << "COST:" << cost << std::endl;
     }
 
