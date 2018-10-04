@@ -148,12 +148,12 @@ public:
     {
         // Run graph
        auto tbegin = std::chrono::high_resolution_clock::now();
-       for(int i=0; i<50; i++){
+       for(int i=0; i<20; i++){
         graph.run();
        }
        auto tend = std::chrono::high_resolution_clock::now();
        double cost0 = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tbegin).count();
-       double cost = cost0/50;
+       double cost = cost0/20;
 
        std::cout << "COST:" << cost << std::endl;
    }

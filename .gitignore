@@ -3,6 +3,7 @@
 !/ComputeLibrary
 !/ComputeLibraryopt
 !/ComputeLibrarypip
+!/ComputeLibrary_3_frame
 build/
 *.sh
 *.log

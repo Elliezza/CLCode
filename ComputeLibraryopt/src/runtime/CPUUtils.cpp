@@ -435,7 +435,6 @@ unsigned int get_threads_hint()
     num_threads_hint = cpu_part_occurrence_map.empty() ? std::thread::hardware_concurrency() : min_common_cores->second;
 #endif /* BARE_METAL */
 
-    num_threads_hint = 1;
     return num_threads_hint;
 }
 

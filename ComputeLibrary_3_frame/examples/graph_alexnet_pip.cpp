@@ -136,7 +136,7 @@ public:
 	    int num_cores = 3;
 	    auto tbegin = std::chrono::high_resolution_clock::now();
 	    int k = 4;
-	    int total = 100;
+	    int total = 200;
 	    int complete = 0;
 	    std::mutex com_m;
 	    std::vector<std::thread> workers(num_cores);
