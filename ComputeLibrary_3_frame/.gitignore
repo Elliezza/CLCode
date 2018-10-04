@@ -5,6 +5,5 @@ build/
 log/
 *.swp
 *bkp
-*ppm
 examples_mod/
 
