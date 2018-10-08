@@ -47,6 +47,7 @@ else:
 
 # Build graph examples
 graph_utils = examples_env.Object("../utils/GraphUtils.cpp")
+streamline_utils = examples_env.Object("streamline_annotate.c")
 examples_libs = examples_env.get("LIBS",[])
 for file in Glob("./graph_*.cpp"):
     example = os.path.basename(os.path.splitext(str(file))[0])
@@ -54,11 +55,11 @@ for file in Glob("./graph_*.cpp"):
     arm_compute_graph_libs = arm_compute_libs
 
     if env['os'] in ['android', 'bare_metal'] or env['standalone']:
-        prog = examples_env.Program(example, ["{}.cpp".format(example), utils, graph_utils], LIBS = examples_libs + arm_compute_graph_libs, LINKFLAGS=examples_env["LINKFLAGS"]+['-Wl,--whole-archive',graph_dependency,'-Wl,--no-whole-archive'])
+        prog = examples_env.Program(example, ["{}.cpp".format(example), utils, graph_utils, streamline_utils], LIBS = examples_libs + arm_compute_graph_libs, LINKFLAGS=examples_env["LINKFLAGS"]+['-Wl,--whole-archive',graph_dependency,'-Wl,--no-whole-archive'])
         Depends(prog, graph_dependency)
     else:
         #-Wl,--allow-shlib-undefined: Ignore dependencies of dependencies
-        prog = examples_env.Program(example, ["{}.cpp".format(example), utils, graph_utils], LIBS = examples_libs + arm_compute_graph_libs, LINKFLAGS=examples_env["LINKFLAGS"]+['-Wl,--allow-shlib-undefined'] )
+        prog = examples_env.Program(example, ["{}.cpp".format(example), utils, graph_utils, streamline_utils], LIBS = examples_libs + arm_compute_graph_libs, LINKFLAGS=examples_env["LINKFLAGS"]+['-Wl,--allow-shlib-undefined'] )
         Depends(prog, graph_dependency)
     alias = examples_env.Alias(example, prog)
     Default(alias)

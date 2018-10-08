@@ -27,6 +27,7 @@
 #include "utils/Utils.h"
 #include <sched.h>
 #include <unistd.h>
+#include  "streamline_annotate.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -53,6 +54,8 @@ public:
         // Create a preprocessor object
         const std::array<float, 3> mean_rgb{ { 122.68f, 116.67f, 104.01f } };
         std::unique_ptr<IPreprocessor> preprocessor = arm_compute::support::cpp14::make_unique<CaffePreproccessor>(mean_rgb);
+
+	ANNOTATE_CHANNEL_COLOR(1, ANNOTATE_RED, "do_setup");
 
         // Set target. 0 (NEON), 1 (OpenCL), 2 (OpenCL with Tuner). By default it is NEON
         const int target      = argc > 1 ? std::strtol(argv[1], nullptr, 10) : 0;
@@ -180,6 +183,8 @@ public:
               << SoftmaxLayer().set_name("prob")
               << OutputLayer(get_output_accessor(label, 5));
 
+	ANNOTATE_CHANNEL_END(1);
+
         // Finalize graph
         GraphConfig config;
         config.use_tuner = (target == 2);
@@ -195,6 +200,7 @@ public:
     {
         // Run graph
 	    std::cout << "Starting of running the kernel" << std::endl;
+	    ANNOTATE_CHANNEL_COLOR(2, ANNOTATE_BLUE, "do_run");
 	auto tbegin = std::chrono::high_resolution_clock::now();
        for(int i=0; i<1; i++){
         graph.run();
@@ -205,6 +211,7 @@ public:
        //double cost = cost0;
 
        std::cout << "COST:" << cost << std::endl;
+       ANNOTATE_CHANNEL_END(2);
     }
 
 private:
@@ -225,5 +232,7 @@ int main(int argc, char **argv)
 	if(e !=0) {
 		std::cout << "Error in setting sched_setaffinity \n";
 	}*/
+	 ANNOTATE_SETUP;
+
     return arm_compute::utils::run_example<GraphAlexnetExample>(argc, argv);
 }
