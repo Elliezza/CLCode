@@ -27,6 +27,7 @@
 #include "utils/Utils.h"
 #include <sched.h>
 #include <unistd.h>
+#include  "streamline_annotate.h"
 
 #include <cstdlib>
 
@@ -57,7 +58,7 @@ public:
         ConvolutionMethod          convolution_hint           = ConvolutionMethod::GEMM;
         DepthwiseConvolutionMethod depthwise_convolution_hint = DepthwiseConvolutionMethod::OPTIMIZED_3x3;
         FastMathHint               fast_math_hint             = FastMathHint::DISABLED;
-
+  ANNOTATE_CHANNEL_COLOR(1, ANNOTATE_RED, "do_setup");
         // Set model to execute. 0 (MobileNetV1_1.0_224), 1 (MobileNetV1_0.75_160)
         int model_id = (argc > 2) ? std::strtol(argv[2], nullptr, 10) : 0;
         ARM_COMPUTE_ERROR_ON_MSG(model_id > 1, "Invalid model ID. Model must be 0 (MobileNetV1_1.0_224) or 1 (MobileNetV1_0.75_160)");
@@ -183,6 +184,7 @@ public:
         GraphConfig config;
         config.use_tuner = (target == 2);
         graph.finalize(target_hint, config);
+          ANNOTATE_CHANNEL_END(1);
     }
 //    void do_run() override
 //    {
@@ -193,6 +195,8 @@ public:
     void do_run() override
     {
         // Run graph
+        std::cout << "Starting of running the kernel" << std::endl;
+      ANNOTATE_CHANNEL_COLOR(2, ANNOTATE_BLUE, "do_run");
        auto tbegin = std::chrono::high_resolution_clock::now();
        for(int i=0; i<10; i++){
         graph.run();
@@ -202,6 +206,7 @@ public:
        double cost = cost0/10;
 	//double cost = cost0;
        std::cout << "COST:" << cost << std::endl;
+       ANNOTATE_CHANNEL_END(2);
     }
 private:
     Stream graph{ 0, "MobileNetV1" };
@@ -265,5 +270,6 @@ int main(int argc, char **argv)
 	if(e !=0) {
 		std::cout << "Error in setting sched_setaffinity \n";
 	}*/
+  ANNOTATE_SETUP;
     return arm_compute::utils::run_example<GraphMobilenetExample>(argc, argv);
 }
