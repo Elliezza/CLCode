@@ -30,6 +30,7 @@
 
 #include <cstdlib>
 #include <tuple>
+#include  "streamline_annotate.h"
 
 using namespace arm_compute::utils;
 using namespace arm_compute::graph::frontend;
@@ -53,7 +54,7 @@ public:
         // Create a preprocessor object
         const std::array<float, 3> mean_rgb{ { 122.68f, 116.67f, 104.01f } };
         std::unique_ptr<IPreprocessor> preprocessor = arm_compute::support::cpp14::make_unique<CaffePreproccessor>(mean_rgb);
-
+  ANNOTATE_CHANNEL_COLOR(1, ANNOTATE_RED, "do_setup");
         // Set target. 0 (NEON), 1 (OpenCL), 2 (OpenCL with Tuner). By default it is NEON
         const int    target         = argc > 1 ? std::strtol(argv[1], nullptr, 10) : 0;
         Target       target_hint    = set_target_hint(target);
@@ -186,6 +187,7 @@ public:
         GraphConfig config;
         config.use_tuner = (target == 2);
         graph.finalize(target_hint, config);
+          ANNOTATE_CHANNEL_END(1);
     }
 //    void do_run() override
 //    {
@@ -196,6 +198,8 @@ public:
     void do_run() override
     {
         // Run graph
+            std::cout << "Starting of running the kernel" << std::endl;
+      ANNOTATE_CHANNEL_COLOR(2, ANNOTATE_BLUE, "do_run");
        auto tbegin = std::chrono::high_resolution_clock::now();
        for(int i=0; i<10; i++){
         graph.run();
@@ -205,6 +209,7 @@ public:
        double cost = cost0/10;
 //	double cost = cost0;
        std::cout << "COST:" << cost << std::endl;
+       ANNOTATE_CHANNEL_END(2);
     }
 private:
     Stream graph{ 0, "SqueezeNetV1" };
@@ -246,5 +251,6 @@ int main(int argc, char **argv)
 	if(e !=0) {
 		std::cout << "Error in setting sched_setaffinity \n";
 	}*/
+  ANNOTATE_SETUP;
     return arm_compute::utils::run_example<GraphSqueezenetExample>(argc, argv);
 }
