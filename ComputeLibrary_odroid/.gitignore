@@ -1,0 +1,11 @@
+#Exclude everything else
+build/
+*.sh
+*.log
+log/
+*.swp
+*bkp
+*ori
+examples/old/
+*dblite
+
